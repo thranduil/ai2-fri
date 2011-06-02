@@ -10,20 +10,20 @@ class cell():
     self.x = x
     self.y = y
     self.parent = parent
-    ##heuristic can be # if this cell cant reach finish
+    #heuristic can be # if this cell cant reach finish
     heu = str(heuristic)
     if heu != heuristic:
       self.h = heuristic
     else:
       self.h = 0
-      
+    #
     if self.parent == None:
       self.g = 0
     else:
       self.g = parent.getG() + 1
   
   def __str__(self):
-    return str(self.x) + " " + str(self.y) + " " + str(self.g)
+    return "[" + str(self.x) + "," + str(self.y)+"]"
   
   ##get current path g(x)
   def getG(self):
