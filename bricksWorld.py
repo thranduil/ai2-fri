@@ -1,4 +1,5 @@
 import random
+from Cell import cell
 
 class brickWorld():
   world = []
@@ -76,7 +77,7 @@ class brickWorld():
       else:
         print self.priceWorld[i],
   
-  ##checks if path from start to finish point exists
+  ##checks if path for current world from start to finish point exists
   def pathExist(self):
     if self.getCell(self.priceWorld,self.mapSize-2,self.mapSize-2) == '#':
       return False
@@ -91,9 +92,59 @@ class brickWorld():
   def getCell(self,world,row,column):
     return world[row*self.mapSize+column]
   
+  ##preform A* search on given map from start to finish point
+  def aStarSearch(self):
+    #in open list we put cells that we are going to look
+    #in closed list we put tuple (x,y) coordinates of cells that we already looked
+    openList = set()
+    closedList = set()
+    #current - start cell
+    current = cell(self.mapSize-2,self.mapSize-2,None,self.getCell(self.priceWorld,self.mapSize-2,self.mapSize-2))
+    openList.add(current)
+    
+    while openList:
+      current = sorted(openList, key = lambda cell:cell.getF() )[0]
+      if current.getXY() == (1,1):
+        print "path found"
+        print len(openList)
+        print len(closedList)
+        return
+      openList.remove(current)
+      closedList.add(current.getXY())
+      neighbors = self.getNeighborCell(current)
+      for n in neighbors:
+        if n.getXY() not in closedList:
+          openList.add(n)
+    print "Fail to find path"
+    print len(openList)
+    print len(closedList)
+  
+  ##returns list of empty neighbor cells
+  def getNeighborCell(self,current):
+    cells = []
+    if current.getX()-1 >= 0 and self.getCell(self.world,current.getX()-1,current.getY()) != 1:
+      cells.append(cell(current.getX()-1, current.getY(), current, self.getCell(self.priceWorld,current.getX()-1,current.getY())))
+    if current.getX()+1 <= self.mapSize-1 and self.getCell(self.world,current.getX()+1,current.getY()) != 1:
+      cells.append(cell(current.getX()+1, current.getY(), current, self.getCell(self.priceWorld,current.getX()+1,current.getY())))
+    if current.getY()-1 >= 0 and self.getCell(self.world,current.getX(),current.getY()-1) != 1:
+      cells.append(cell(current.getX(), current.getY()-1, current, self.getCell(self.priceWorld,current.getX(),current.getY()-1)))
+    if current.getY()+1 <= self.mapSize-1 and self.getCell(self.world,current.getX(),current.getY()+1) != 1:
+      cells.append(cell(current.getX(), current.getY()+1, current, self.getCell(self.priceWorld,current.getX(),current.getY()+1)))
+    return cells
+      
+  
+  ##preform IDA* search on given map from start to finish point
+  def idaStarSearch(self):
+    print "test"
+
+  ##preform RBFS search on given map from start to finish point
+  def rbfsSearch(self):
+    print "test"
+    
 ##testing on one object
-w = brickWorld(10,25)
+w = brickWorld(10,23)
 w.createBrickWorld()
 w.printWorld()
 print w.pathExist()
 w.printPriceWorld()
+w.aStarSearch()
