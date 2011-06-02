@@ -7,6 +7,9 @@ class brickWorld():
   mapSize = 0
   density = 0
   
+  aStarCheckedNodes = 0
+  aStarOpenNodes = 0
+  
   def __init__(self, size,density):
     self.mapSize = size
     self.density = density
@@ -37,7 +40,7 @@ class brickWorld():
       self.setCell(self.world,y,x,1)
     self.computePrices(1,1,self.priceWorld)
   
-  ##recurusively compute distance from finish for every cell
+  ##recursively compute distance from finish for every cell
   def computePrices(self,x,y,priceWorld):
     if self.getCell(self.world,x,y) == 1:
       return
@@ -105,9 +108,10 @@ class brickWorld():
     while openList:
       current = sorted(openList, key = lambda cell:cell.getF() )[0]
       if current.getXY() == (1,1):
-        print "path found"
-        print len(openList)
-        print len(closedList)
+        print "Path found"
+        self.aStarCheckedNodes = len(closedList)
+        self.aStarOpenNodes = len(openList)
+        #self.printPath(current)
         return
       openList.remove(current)
       closedList.add(current.getXY())
@@ -116,9 +120,16 @@ class brickWorld():
         if n.getXY() not in closedList:
           openList.add(n)
     print "Fail to find path"
-    print len(openList)
-    print len(closedList)
-  
+      
+  ##preform IDA* search on given map from start to finish point
+  def idaStarSearch(self):
+    print "test"
+
+  ##preform RBFS search on given map from start to finish point
+  def rbfsSearch(self):
+    print "test"
+
+
   ##returns list of empty neighbor cells
   def getNeighborCell(self,current):
     cells = []
@@ -131,15 +142,12 @@ class brickWorld():
     if current.getY()+1 <= self.mapSize-1 and self.getCell(self.world,current.getX(),current.getY()+1) != 1:
       cells.append(cell(current.getX(), current.getY()+1, current, self.getCell(self.priceWorld,current.getX(),current.getY()+1)))
     return cells
-      
-  
-  ##preform IDA* search on given map from start to finish point
-  def idaStarSearch(self):
-    print "test"
 
-  ##preform RBFS search on given map from start to finish point
-  def rbfsSearch(self):
-    print "test"
+  ##recursively print path from finish to start point
+  def printPath(self,currentCell):
+    while currentCell != None:
+      print currentCell
+      currentCell = currentCell.parent
     
 ##testing on one object
 w = brickWorld(10,23)
