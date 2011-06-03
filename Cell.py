@@ -29,7 +29,11 @@ class cell():
   def getG(self):
     return self.g
   
-  ##get f(x) for current cell
+  ##get heuristic score for cell
+  def getH(self):
+    return self.h
+  
+  ##get f(x) for cell
   def getF(self):
     return self.h + self.g
   

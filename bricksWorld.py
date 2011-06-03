@@ -109,6 +109,8 @@ class brickWorld():
       current = sorted(openList, key = lambda cell:cell.getF() )[0]
       if current.getXY() == (1,1):
         print "Path found"
+        print len(closedList)
+        print len(openList)
         self.aStarCheckedNodes = len(closedList)
         self.aStarOpenNodes = len(openList)
         #self.printPath(current)
@@ -121,9 +123,36 @@ class brickWorld():
           openList.add(n)
     print "Fail to find path"
       
+
   ##preform IDA* search on given map from start to finish point
   def idaStarSearch(self):
-    print "test"
+    #start cell
+    rootNode = cell(self.mapSize-2,self.mapSize-2,None,self.getCell(self.priceWorld,self.mapSize-2,self.mapSize-2))
+    costLimit = rootNode.getH()
+    while True:
+      (solution, costLimit) = DFS(0, rootNode, costLimit, [rootNode])
+      if solution != None:
+        return (solution, costLimit)
+      if costLimit == Infinity:
+        return None
+ 
+  ##depth first searc for IDA*
+  def DFS(self, startCost, node, costLimit, currentPath):
+    print "startCost:", startCost, ", node:", node, ", costLimit:", costLimit, ", path_so_far:", currentPath
+ 
+    minimum_cost = startCost + node.getH()
+    print "  minimum_cost:", minimum_cost
+    if minimum_cost > costLimit: return (None, minimum_cost)
+    if node in goalNodes: return (currentPath, costLimit)
+ 
+    next_cost_limit = Infinity
+    for succNode in successors[node]:
+      newStartCost = startCost + edgeCosts[(node,succNode)]
+      (solution, new_cost_limit) = DFS(newStartCost, succNode, costLimit, currentPath + [succNode])
+      if solution != None: return (solution, new_cost_limit)
+      next_cost_limit = min(next_cost_limit, new_cost_limit)
+ 
+  return (None, next_cost_limit)  
 
   ##preform RBFS search on given map from start to finish point
   def rbfsSearch(self):
@@ -150,7 +179,7 @@ class brickWorld():
       currentCell = currentCell.parent
     
 ##testing on one object
-w = brickWorld(10,23)
+w = brickWorld(20,70)
 w.createBrickWorld()
 w.printWorld()
 print w.pathExist()
