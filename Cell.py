@@ -24,6 +24,9 @@ class cell():
   
   def __str__(self):
     return "[" + str(self.x) + "," + str(self.y)+"]"
+
+  def __repr__(self):
+    return "[" + str(self.x) + "," + str(self.y)+"]"
   
   ##get current path g(x)
   def getG(self):

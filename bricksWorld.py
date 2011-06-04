@@ -1,6 +1,8 @@
 import random
 from Cell import cell
 
+Infinity = 1e10000
+
 class brickWorld():
   world = []
   priceWorld=[]
@@ -9,6 +11,8 @@ class brickWorld():
   
   aStarCheckedNodes = 0
   aStarOpenNodes = 0
+  
+  idaStarNodes = 0
   
   def __init__(self, size,density):
     self.mapSize = size
@@ -130,29 +134,32 @@ class brickWorld():
     rootNode = cell(self.mapSize-2,self.mapSize-2,None,self.getCell(self.priceWorld,self.mapSize-2,self.mapSize-2))
     costLimit = rootNode.getH()
     while True:
-      (solution, costLimit) = DFS(0, rootNode, costLimit, [rootNode])
+      (solution, costLimit) = self.DFS(0, rootNode, costLimit, [rootNode])
       if solution != None:
         return (solution, costLimit)
       if costLimit == Infinity:
         return None
  
-  ##depth first searc for IDA*
+  ##depth first search for IDA*
   def DFS(self, startCost, node, costLimit, currentPath):
     print "startCost:", startCost, ", node:", node, ", costLimit:", costLimit, ", path_so_far:", currentPath
  
-    minimum_cost = startCost + node.getH()
-    print "  minimum_cost:", minimum_cost
-    if minimum_cost > costLimit: return (None, minimum_cost)
-    if node in goalNodes: return (currentPath, costLimit)
+    minimumCost = startCost + node.getH()
+    print " minimum_cost:", minimumCost
+    if minimumCost > costLimit:
+      return (None, minimumCost)
+    if node.getXY() == (1,1):
+      return (currentPath, costLimit)
  
-    next_cost_limit = Infinity
-    for succNode in successors[node]:
-      newStartCost = startCost + edgeCosts[(node,succNode)]
-      (solution, new_cost_limit) = DFS(newStartCost, succNode, costLimit, currentPath + [succNode])
-      if solution != None: return (solution, new_cost_limit)
-      next_cost_limit = min(next_cost_limit, new_cost_limit)
- 
-  return (None, next_cost_limit)  
+    nextCostLimit = Infinity
+    for succNode in self.getNeighborCell(node):
+      self.idaStarNodes += 1
+      newStartCost = startCost + 1
+      (solution, newCostLimit) = self.DFS(newStartCost, succNode, costLimit, currentPath + [succNode])
+      if solution != None:
+        return (solution, newCostLimit)
+      nextCostLimit = min(nextCostLimit, newCostLimit)
+    return (None,nextCostLimit)  
 
   ##preform RBFS search on given map from start to finish point
   def rbfsSearch(self):
@@ -185,3 +192,5 @@ w.printWorld()
 print w.pathExist()
 w.printPriceWorld()
 w.aStarSearch()
+w.idaStarSearch()
+print w.idaStarNodes
