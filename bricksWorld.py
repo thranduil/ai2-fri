@@ -80,9 +80,15 @@ class brickWorld():
   def printPriceWorld(self):
     for i in range(self.mapSize*self.mapSize):
       if i%self.mapSize == self.mapSize-1:
-        print self.priceWorld[i]
+        if self.priceWorld[i] == '#':
+          print self.priceWorld[i]+'#'
+        else:
+          print '%02d'%int(self.priceWorld[i])
       else:
-        print self.priceWorld[i],
+        if self.priceWorld[i] == '#':
+          print self.priceWorld[i]+'#',
+        else:
+          print '%02d'%int(self.priceWorld[i]),
   
   ##checks if path for current world from start to finish point exists
   def pathExist(self):
@@ -142,10 +148,7 @@ class brickWorld():
  
   ##depth first search for IDA*
   def DFS(self, startCost, node, costLimit, currentPath):
-    print "startCost:", startCost, ", node:", node, ", costLimit:", costLimit, ", path_so_far:", currentPath
- 
     minimumCost = startCost + node.getH()
-    print " minimum_cost:", minimumCost
     if minimumCost > costLimit:
       return (None, minimumCost)
     if node.getXY() == (1,1):
@@ -184,6 +187,12 @@ class brickWorld():
     while currentCell != None:
       print currentCell
       currentCell = currentCell.parent
+      
+  def changeHeuristic(self):
+    newHeuristic = []
+    for i in self.priceWorld:
+      newHeuristic.append(i)
+      
     
 ##testing on one object
 w = brickWorld(20,70)
