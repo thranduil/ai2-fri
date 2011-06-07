@@ -120,7 +120,6 @@ class brickWorld():
       current = sorted(temp, key = lambda cell:cell.getF())[0]
 
       if current.getXY() == (1,1):
-        print "Path found"
         print "A* closed list:"+str(len(closedList))
         #print len(openList)
         self.aStarCheckedNodes = len(closedList)
@@ -225,18 +224,20 @@ w = brickWorld(20,70)
 w.createBrickWorld()
 w.printWorld()
 
-print w.pathExist()
+if w.pathExist():
 
-w.printPriceWorld(w.priceWorld)
-#w.printPriceWorld(a)
+  a = w.changeHeuristic('center',10)
+  w.printPriceWorld(w.priceWorld)
+  print
+  w.printPriceWorld(a)
 
-w.aStarSearch(w.priceWorld)
-w.idaStarSearch(w.priceWorld)
-print "IDA* nodes:" +str(w.idaStarNodes)
+  w.aStarSearch(w.priceWorld)
+  w.idaStarSearch(w.priceWorld)
+  print "IDA* nodes:" +str(w.idaStarNodes)
 
-a = w.changeHeuristic('center',10)
-
-w.aStarSearch(a)
-w.idaStarSearch(a)
-print "IDA* nodes:" +str(w.idaStarNodes)
+  w.aStarSearch(a)
+  w.idaStarSearch(a)
+  print "IDA* nodes:" +str(w.idaStarNodes)
+else:
+  print "You shall not pass"
 
