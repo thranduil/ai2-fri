@@ -106,13 +106,13 @@ class brickWorld():
     return world[row*self.mapSize+column]
   
   ##preform A* search on given map from start to finish point
-  def aStarSearch(self):
+  def aStarSearch(self,heuristic):
     #in open list we put cells that we are going to look
     #in closed list we put tuple (x,y) coordinates of cells that we already looked
     openList = set()
     closedList = set()
     #current - start cell
-    current = cell(self.mapSize-2,self.mapSize-2,None,self.getCell(self.priceWorld,self.mapSize-2,self.mapSize-2))
+    current = cell(self.mapSize-2,self.mapSize-2,None,self.getCell(heuristic,self.mapSize-2,self.mapSize-2))
     openList.add(current)
     
     while openList:
@@ -121,15 +121,15 @@ class brickWorld():
 
       if current.getXY() == (1,1):
         print "Path found"
-        print len(closedList)
-        print len(openList)
+        print "A* closed list:"+str(len(closedList))
+        #print len(openList)
         self.aStarCheckedNodes = len(closedList)
         self.aStarOpenNodes = len(openList)
         #self.printPath(current)
         return
       openList.remove(current)
       closedList.add(current.getXY())
-      neighbors = self.getNeighborCell(current)
+      neighbors = self.getNeighborCell(current, heuristic)
       for n in neighbors:
         if n.getXY() not in closedList:
           openList.add(n)
@@ -137,19 +137,19 @@ class brickWorld():
       
 
   ##preform IDA* search on given map from start to finish point
-  def idaStarSearch(self):
+  def idaStarSearch(self, heuristic):
     #start cell
-    rootNode = cell(self.mapSize-2,self.mapSize-2,None,self.getCell(self.priceWorld,self.mapSize-2,self.mapSize-2))
+    rootNode = cell(self.mapSize-2,self.mapSize-2,None,self.getCell(heuristic,self.mapSize-2,self.mapSize-2))
     costLimit = rootNode.getH()
     while True:
-      (solution, costLimit) = self.DFS(0, rootNode, costLimit, [rootNode])
+      (solution, costLimit) = self.DFS(0, rootNode, costLimit, [rootNode],heuristic)
       if solution != None:
         return (solution, costLimit)
       if costLimit == Infinity:
         return None
  
   ##depth first search for IDA*
-  def DFS(self, startCost, node, costLimit, currentPath):
+  def DFS(self, startCost, node, costLimit, currentPath, heuristic):
     minimumCost = startCost + node.getH()
     if minimumCost > costLimit:
       return (None, minimumCost)
@@ -157,10 +157,10 @@ class brickWorld():
       return (currentPath, costLimit)
  
     nextCostLimit = Infinity
-    for succNode in self.getNeighborCell(node):
+    for succNode in self.getNeighborCell(node, heuristic):
       self.idaStarNodes += 1
       newStartCost = startCost + 1
-      (solution, newCostLimit) = self.DFS(newStartCost, succNode, costLimit, currentPath + [succNode])
+      (solution, newCostLimit) = self.DFS(newStartCost, succNode, costLimit, currentPath + [succNode],heuristic)
       if solution != None:
         return (solution, newCostLimit)
       nextCostLimit = min(nextCostLimit, newCostLimit)
@@ -172,16 +172,16 @@ class brickWorld():
 
 
   ##returns list of empty neighbor cells
-  def getNeighborCell(self,current):
+  def getNeighborCell(self,current, heuristic):
     cells = []
     if current.getX()-1 >= 0 and self.getCell(self.world,current.getX()-1,current.getY()) != 1:
-      cells.append(cell(current.getX()-1, current.getY(), current, self.getCell(self.priceWorld,current.getX()-1,current.getY())))
+      cells.append(cell(current.getX()-1, current.getY(), current, self.getCell(heuristic,current.getX()-1,current.getY())))
     if current.getX()+1 <= self.mapSize-1 and self.getCell(self.world,current.getX()+1,current.getY()) != 1:
-      cells.append(cell(current.getX()+1, current.getY(), current, self.getCell(self.priceWorld,current.getX()+1,current.getY())))
+      cells.append(cell(current.getX()+1, current.getY(), current, self.getCell(heuristic,current.getX()+1,current.getY())))
     if current.getY()-1 >= 0 and self.getCell(self.world,current.getX(),current.getY()-1) != 1:
-      cells.append(cell(current.getX(), current.getY()-1, current, self.getCell(self.priceWorld,current.getX(),current.getY()-1)))
+      cells.append(cell(current.getX(), current.getY()-1, current, self.getCell(heuristic,current.getX(),current.getY()-1)))
     if current.getY()+1 <= self.mapSize-1 and self.getCell(self.world,current.getX(),current.getY()+1) != 1:
-      cells.append(cell(current.getX(), current.getY()+1, current, self.getCell(self.priceWorld,current.getX(),current.getY()+1)))
+      cells.append(cell(current.getX(), current.getY()+1, current, self.getCell(heuristic,current.getX(),current.getY()+1)))
     return cells
 
   ##recursively print path from finish to start point
@@ -224,11 +224,19 @@ class brickWorld():
 w = brickWorld(20,70)
 w.createBrickWorld()
 w.printWorld()
+
 print w.pathExist()
+
 w.printPriceWorld(w.priceWorld)
-w.aStarSearch()
-w.idaStarSearch()
-print w.idaStarNodes
+#w.printPriceWorld(a)
+
+w.aStarSearch(w.priceWorld)
+w.idaStarSearch(w.priceWorld)
+print "IDA* nodes:" +str(w.idaStarNodes)
+
 a = w.changeHeuristic('center',10)
-w.printPriceWorld(a)
+
+w.aStarSearch(a)
+w.idaStarSearch(a)
+print "IDA* nodes:" +str(w.idaStarNodes)
 
