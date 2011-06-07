@@ -191,8 +191,9 @@ class brickWorld():
       currentCell = currentCell.parent
   
   ##returns changed heuristic, part is place where heuristic are real values    
-  def changeHeuristic(self, part):
+  def changeHeuristic(self, part, percentage):
     newHeuristic = []
+    percentage = float(percentage)/100
     for i in self.priceWorld:
       newHeuristic.append(i)
     
@@ -206,15 +207,15 @@ class brickWorld():
         
         if part == "start":
           if curr_h < (float(path_length*2)/3):
-            self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)/2))))
+            self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)*percentage))))
         
         if part == "center":
           if curr_h > (float(path_length*2)/3) or curr_h < (float(path_length)/3):
-            self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)/2))))
+            self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)*percentage))))
         
         if part == "end":
-          if curr_h > (float(path_length*2)/3):
-            self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)/2))))
+          if curr_h > (float(path_length)/3):
+            self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)*percentage))))
     
     return newHeuristic
       
@@ -228,5 +229,5 @@ w.printPriceWorld(w.priceWorld)
 w.aStarSearch()
 w.idaStarSearch()
 print w.idaStarNodes
-a = w.changeHeuristic('center')
+a = w.changeHeuristic('end',20)
 w.printPriceWorld(a)
