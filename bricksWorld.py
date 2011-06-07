@@ -116,7 +116,8 @@ class brickWorld():
     openList.add(current)
     
     while openList:
-      current = sorted(openList, key = lambda cell:cell.getF() )[0]
+      temp = sorted(openList, key = lambda cell:cell.getG(), reverse=True)
+      current = sorted(temp, key = lambda cell:cell.getF())[0]
       if current.getXY() == (1,1):
         print "Path found"
         print len(closedList)
@@ -140,6 +141,7 @@ class brickWorld():
     rootNode = cell(self.mapSize-2,self.mapSize-2,None,self.getCell(self.priceWorld,self.mapSize-2,self.mapSize-2))
     costLimit = rootNode.getH()
     while True:
+      print 'hello'
       (solution, costLimit) = self.DFS(0, rootNode, costLimit, [rootNode])
       if solution != None:
         return (solution, costLimit)
