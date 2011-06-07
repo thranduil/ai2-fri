@@ -118,6 +118,7 @@ class brickWorld():
     while openList:
       temp = sorted(openList, key = lambda cell:cell.getG(), reverse=True)
       current = sorted(temp, key = lambda cell:cell.getF())[0]
+
       if current.getXY() == (1,1):
         print "Path found"
         print len(closedList)
@@ -141,7 +142,6 @@ class brickWorld():
     rootNode = cell(self.mapSize-2,self.mapSize-2,None,self.getCell(self.priceWorld,self.mapSize-2,self.mapSize-2))
     costLimit = rootNode.getH()
     while True:
-      print 'hello'
       (solution, costLimit) = self.DFS(0, rootNode, costLimit, [rootNode])
       if solution != None:
         return (solution, costLimit)
@@ -189,11 +189,26 @@ class brickWorld():
     while currentCell != None:
       print currentCell
       currentCell = currentCell.parent
-      
-  def changeHeuristic(self):
+  
+  ##returns changed heuristic, part is place where heuristic are real values    
+  def changeHeuristic(self, part):
     newHeuristic = []
     for i in self.priceWorld:
       newHeuristic.append(i)
+    
+    paht_length = self.getCell(self.priceWorld,self.mapSize-2,self.mapSize-2)
+    
+    for i in range(0, self.mapSize-1):
+      for j in range(0, self.mapSize-1):
+        curr_h = self.getCell(newHeuristic, i, j)
+        
+        if part == "start":
+          if curr_h < (float(path_length*2)/3):
+            self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,curr_h*0.5))))
+        
+        if part == "center":
+          if curr_h > (float(path_length*2)/3) or curr_h < (float(path_length)/3):
+            self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,curr_h*0.5))))
       
     
 ##testing on one object
