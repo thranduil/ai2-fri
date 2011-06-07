@@ -77,18 +77,18 @@ class brickWorld():
         print self.world[i],
   
   ##prints prices for world
-  def printPriceWorld(self):
+  def printPriceWorld(self, prices):
     for i in range(self.mapSize*self.mapSize):
       if i%self.mapSize == self.mapSize-1:
-        if self.priceWorld[i] == '#':
-          print self.priceWorld[i]+'#'
+        if prices[i] == '#':
+          print prices[i]+'#'
         else:
-          print '%02d'%int(self.priceWorld[i])
+          print '%02d'%int(prices[i])
       else:
-        if self.priceWorld[i] == '#':
-          print self.priceWorld[i]+'#',
+        if prices[i] == '#':
+          print prices[i]+'#',
         else:
-          print '%02d'%int(self.priceWorld[i]),
+          print '%02d'%int(prices[i]),
   
   ##checks if path for current world from start to finish point exists
   def pathExist(self):
@@ -196,19 +196,27 @@ class brickWorld():
     for i in self.priceWorld:
       newHeuristic.append(i)
     
-    paht_length = self.getCell(self.priceWorld,self.mapSize-2,self.mapSize-2)
+    path_length = self.getCell(self.priceWorld,self.mapSize-2,self.mapSize-2)
     
     for i in range(0, self.mapSize-1):
       for j in range(0, self.mapSize-1):
         curr_h = self.getCell(newHeuristic, i, j)
+        if curr_h == '#':
+          continue
         
         if part == "start":
           if curr_h < (float(path_length*2)/3):
-            self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,curr_h*0.5))))
+            self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)/2))))
         
         if part == "center":
           if curr_h > (float(path_length*2)/3) or curr_h < (float(path_length)/3):
-            self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,curr_h*0.5))))
+            self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)/2))))
+        
+        if part == "end":
+          if curr_h > (float(path_length*2)/3):
+            self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)/2))))
+    
+    return newHeuristic
       
     
 ##testing on one object
@@ -216,7 +224,9 @@ w = brickWorld(20,70)
 w.createBrickWorld()
 w.printWorld()
 print w.pathExist()
-w.printPriceWorld()
+w.printPriceWorld(w.priceWorld)
 w.aStarSearch()
 w.idaStarSearch()
 print w.idaStarNodes
+a = w.changeHeuristic('center')
+w.printPriceWorld(a)
