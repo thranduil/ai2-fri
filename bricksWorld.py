@@ -1,5 +1,6 @@
 import random
 from Cell import cell
+import time
 
 Infinity = 1e10000
 
@@ -36,13 +37,14 @@ class brickWorld():
     self.setCell(self.priceWorld,1,1,0)
     
     #fill the map with random walls
-    random.seed()
+    random.seed(int(time.time()))
     for i in range(self.density):
       x,y = random.randint(1,self.mapSize-2),random.randint(1,self.mapSize-2)
       if x == 1 and y == 1 or x == self.mapSize-2 and y == self.mapSize-2:
         continue
       self.setCell(self.world,y,x,1)
     self.computePrices(1,1,self.priceWorld)
+    return self
   
   ##recursively compute distance from finish for every cell
   def computePrices(self,x,y,priceWorld):
@@ -66,7 +68,7 @@ class brickWorld():
     if self.getCell(self.world,x,y+1) != 1:
        if self.getCell(priceWorld,x,y+1) == '#' or self.getCell(priceWorld,x,y+1) > self.getCell(priceWorld,x,y)+1:
         self.setCell(priceWorld,x,y+1,self.getCell(priceWorld,x,y)+1)
-        self.computePrices(x,y+1,priceWorld)   
+        self.computePrices(x,y+1,priceWorld)
   
   ##prints world
   def printWorld(self):
@@ -244,13 +246,22 @@ def testingHeuristic(noOfExamples):
   
   i=0
   while i<noOfExamples:
-    temp = brickWorld(20,70)
-    temp.createBrickWorld()
-    if temp.pathExist() == True:
-      maps.append(temp)
-      i+=1
-    else:
-      i-=1
+    maps.append(brickWorld(20,70).createBrickWorld())
+    i+=1
+    #print i
+    #temp = brickWorld(20,70)
+    #temp.createBrickWorld()
+    #if temp.pathExist() == True:
+      #temp.printPriceWorld(temp.priceWorld)
+      #print ""
+      #maps.append(temp)
+      #i+=1
+    #else:
+      #temp.printPriceWorld(temp.priceWorld)
+    #del(temp)
+    maps[-1].printPriceWorld(maps[-1].priceWorld)
+    print ""
+    
   
   realData = []
   startH = []
@@ -259,24 +270,64 @@ def testingHeuristic(noOfExamples):
   
   for m in maps:
     m.aStarSearch(m.priceWorld)
+    print "a"
     m.idaStarSearch(m.priceWorld)
+    print "ida"
     realData.append((m.aStarCheckedNodes, m.idaStarNodes))
     
-    start = m.changeHeuristic('optimistic_gauss','start',10)
-    center = m.changeHeuristic('optimistic_gauss','center',10)
-    end = m.changeHeuristic('optimistic_gauss','end',10)
+    #start = m.changeHeuristic('optimistic_gauss','start',10)
+    #center = m.changeHeuristic('optimistic_gauss','center',10)
+    #end = m.changeHeuristic('optimistic_gauss','end',10)
     
-    m.aStarSearch(start)
-    m.idaStarSearch(start)
-    startH.append((m.aStarCheckedNodes, m.idaStarNodes))
+    #m.aStarSearch(start)
+    #m.idaStarSearch(start)
+    #startH.append((m.aStarCheckedNodes, m.idaStarNodes))
     
-    m.aStarSearch(center)
-    m.idaStarSearch(center)
-    centerH.append((m.aStarCheckedNodes, m.idaStarNodes))
+    #m.aStarSearch(center)
+    #m.idaStarSearch(center)
+    #centerH.append((m.aStarCheckedNodes, m.idaStarNodes))
     
-    m.aStarSearch(end)
-    m.idaStarSearch(end)
-    endH.append((m.aStarCheckedNodes, m.idaStarNodes))
+    #m.aStarSearch(end)
+    #m.idaStarSearch(end)
+    #endH.append((m.aStarCheckedNodes, m.idaStarNodes))
+    
+  for a  in realData:
+    print a
+  
+#testingHeuristic(5)
+a = brickWorld(20,70)
+a.createBrickWorld()
 
-testingHeuristic(100)
+if a.pathExist()==True:
+  a.aStarSearch(a.priceWorld)
+  a.idaStarSearch(a.priceWorld)
+  print "a*:"+str(a.aStarCheckedNodes)
+  print "ida*:"+str(a.idaStarNodes)
+  print ""
+  
+  start = a.changeHeuristic('optimistic_gauss','start',10)
+  center = a.changeHeuristic('optimistic_gauss','center',10)
+  end = a.changeHeuristic('optimistic_gauss','end',10)
+      
+  a.aStarSearch(start)
+  a.idaStarSearch(start)
+  print "start a*:"+str(a.aStarCheckedNodes)
+  print "start ida*:"+str(a.idaStarNodes)
+  print ""   
+  
+  a.aStarSearch(center)
+  a.idaStarSearch(center)
+  print "center a*:"+str(a.aStarCheckedNodes)
+  print "center ida*:"+str(a.idaStarNodes)
+  print ""
+        
+  a.aStarSearch(end)
+  a.idaStarSearch(end)
+  print "end a*:"+str(a.aStarCheckedNodes)
+  print "end ida*:"+str(a.idaStarNodes)
+  print ""
+  
+else:
+  print "Path doesnt exist. Try again."
+
 
