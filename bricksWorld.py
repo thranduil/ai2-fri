@@ -229,6 +229,6 @@ w.printPriceWorld(w.priceWorld)
 w.aStarSearch()
 w.idaStarSearch()
 print w.idaStarNodes
-a = w.changeHeuristic('end',20)
+a = w.changeHeuristic('center',10)
 w.printPriceWorld(a)
 
