@@ -213,7 +213,7 @@ class brickWorld():
             self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)/2))))
         
         if part == "end":
-          if curr_h > (float(path_length*2)/3):
+          if curr_h > (float(path_length)/3):
             self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)/2))))
     
     return newHeuristic
@@ -228,5 +228,5 @@ w.printPriceWorld(w.priceWorld)
 w.aStarSearch()
 w.idaStarSearch()
 print w.idaStarNodes
-a = w.changeHeuristic('center')
+a = w.changeHeuristic('end')
 w.printPriceWorld(a)
