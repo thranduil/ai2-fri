@@ -190,8 +190,9 @@ class brickWorld():
       print currentCell
       currentCell = currentCell.parent
   
-  ##returns changed heuristic, part is place where heuristic are real values    
-  def changeHeuristic(self, part, percentage):
+  ##returns changed heuristic, part is place where heuristic are real values
+  ##possible noise types: gauss, optimistic_gauss 
+  def changeHeuristic(self, noise, part, percentage):
     newHeuristic = []
     percentage = float(percentage)/100
     for i in self.priceWorld:
@@ -205,17 +206,40 @@ class brickWorld():
         if curr_h == '#':
           continue
         
-        if part == "start":
-          if curr_h < (float(path_length*2)/3):
-            self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)*percentage))))
-        
-        if part == "center":
-          if curr_h > (float(path_length*2)/3) or curr_h < (float(path_length)/3):
-            self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)*percentage))))
-        
-        if part == "end":
-          if curr_h > (float(path_length)/3):
-            self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)*percentage))))
+        if noise == "gauss":
+          if part == "start":
+            if curr_h < (float(path_length*2)/3):
+              self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)*percentage))))
+          
+          if part == "center":
+            if curr_h > (float(path_length*2)/3) or curr_h < (float(path_length)/3):
+              self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)*percentage))))
+          
+          if part == "end":
+            if curr_h > (float(path_length)/3):
+              self.setCell(newHeuristic, i, j, int(round(random.gauss(curr_h,float(curr_h)*percentage))))
+              
+        elif noise == "optimistic_gauss":
+          if part == "start":
+            if curr_h < (float(path_length*2)/3):
+              new_h = int(round(random.gauss(curr_h,float(curr_h)*percentage)))
+              while new_h > curr_h:
+                new_h = int(round(random.gauss(curr_h,float(curr_h)*percentage)))
+              self.setCell(newHeuristic, i, j, new_h)
+          
+          if part == "center":
+            if curr_h > (float(path_length*2)/3) or curr_h < (float(path_length)/3):
+              new_h = int(round(random.gauss(curr_h,float(curr_h)*percentage)))
+              while new_h > curr_h:
+                new_h = int(round(random.gauss(curr_h,float(curr_h)*percentage)))
+              self.setCell(newHeuristic, i, j, new_h)
+          
+          if part == "end":
+            if curr_h > (float(path_length)/3):
+              new_h = int(round(random.gauss(curr_h,float(curr_h)*percentage)))
+              while new_h > curr_h:
+                new_h = int(round(random.gauss(curr_h,float(curr_h)*percentage)))
+            self.setCell(newHeuristic, i, j, new_h)
     
     return newHeuristic
       
@@ -228,13 +252,14 @@ w.printWorld()
 print w.pathExist()
 
 w.printPriceWorld(w.priceWorld)
-#w.printPriceWorld(a)
+
 
 w.aStarSearch(w.priceWorld)
 w.idaStarSearch(w.priceWorld)
 print "IDA* nodes:" +str(w.idaStarNodes)
 
-a = w.changeHeuristic('center',10)
+a = w.changeHeuristic('optimistic_gauss', 'start', 10)
+w.printPriceWorld(a)
 
 w.aStarSearch(a)
 w.idaStarSearch(a)
