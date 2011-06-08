@@ -1,8 +1,9 @@
-import random
+import random, hashlib
 from Cell import cell
 import time
 
 Infinity = 1e10000
+
 
 class brickWorld():
   world = []
@@ -18,6 +19,7 @@ class brickWorld():
   def __init__(self, size,density):
     self.mapSize = size
     self.density = density
+    self.createBrickWorld()
     
   ##create world with random bricks in it
   ##1 is block,0 is empty space, 2 is finish, 3 is start 
@@ -37,14 +39,12 @@ class brickWorld():
     self.setCell(self.priceWorld,1,1,0)
     
     #fill the map with random walls
-    random.seed(int(time.time()))
     for i in range(self.density):
       x,y = random.randint(1,self.mapSize-2),random.randint(1,self.mapSize-2)
       if x == 1 and y == 1 or x == self.mapSize-2 and y == self.mapSize-2:
         continue
       self.setCell(self.world,y,x,1)
     self.computePrices(1,1,self.priceWorld)
-    return self
   
   ##recursively compute distance from finish for every cell
   def computePrices(self,x,y,priceWorld):
@@ -246,7 +246,7 @@ def testingHeuristic(noOfExamples):
   
   i=0
   while i<noOfExamples:
-    maps.append(brickWorld(20,70).createBrickWorld())
+    maps.append(brickWorld(20,50))
     i+=1
     #print i
     #temp = brickWorld(20,70)
@@ -259,7 +259,13 @@ def testingHeuristic(noOfExamples):
     #else:
       #temp.printPriceWorld(temp.priceWorld)
     #del(temp)
-    maps[-1].printPriceWorld(maps[-1].priceWorld)
+    
+    
+		
+  for maps1 in maps:
+    print maps1
+    print id(maps1.priceWorld)
+    print hashlib.md5(str(maps1.priceWorld)).hexdigest()
     print ""
     
   
@@ -291,43 +297,45 @@ def testingHeuristic(noOfExamples):
     #m.idaStarSearch(end)
     #endH.append((m.aStarCheckedNodes, m.idaStarNodes))
     
-  for a  in realData:
-    print a
-  
-#testingHeuristic(5)
-a = brickWorld(20,70)
-a.createBrickWorld()
+  #for a  in realData:
+  #  print a
 
-if a.pathExist()==True:
-  a.aStarSearch(a.priceWorld)
-  a.idaStarSearch(a.priceWorld)
-  print "a*:"+str(a.aStarCheckedNodes)
-  print "ida*:"+str(a.idaStarNodes)
-  print ""
+random.seed()  
+testingHeuristic(5)
+
+#a = brickWorld(20,70)
+#a.createBrickWorld()
+
+#if a.pathExist()==True:
+#  a.aStarSearch(a.priceWorld)
+#  a.idaStarSearch(a.priceWorld)
+#  print "a*:"+str(a.aStarCheckedNodes)
+#  print "ida*:"+str(a.idaStarNodes)
+#  print ""
   
-  start = a.changeHeuristic('optimistic_gauss','start',10)
-  center = a.changeHeuristic('optimistic_gauss','center',10)
-  end = a.changeHeuristic('optimistic_gauss','end',10)
+#  start = a.changeHeuristic('optimistic_gauss','start',10)
+#  center = a.changeHeuristic('optimistic_gauss','center',10)
+#  end = a.changeHeuristic('optimistic_gauss','end',10)
       
-  a.aStarSearch(start)
-  a.idaStarSearch(start)
-  print "start a*:"+str(a.aStarCheckedNodes)
-  print "start ida*:"+str(a.idaStarNodes)
-  print ""   
+#  a.aStarSearch(start)
+#  a.idaStarSearch(start)
+#  print "start a*:"+str(a.aStarCheckedNodes)
+#  print "start ida*:"+str(a.idaStarNodes)
+#  print ""   
   
-  a.aStarSearch(center)
-  a.idaStarSearch(center)
-  print "center a*:"+str(a.aStarCheckedNodes)
-  print "center ida*:"+str(a.idaStarNodes)
-  print ""
+#  a.aStarSearch(center)
+#  a.idaStarSearch(center)
+#  print "center a*:"+str(a.aStarCheckedNodes)
+#  print "center ida*:"+str(a.idaStarNodes)
+#  print ""
         
-  a.aStarSearch(end)
-  a.idaStarSearch(end)
-  print "end a*:"+str(a.aStarCheckedNodes)
-  print "end ida*:"+str(a.idaStarNodes)
-  print ""
+#  a.aStarSearch(end)
+#  a.idaStarSearch(end)
+#  print "end a*:"+str(a.aStarCheckedNodes)
+#  print "end ida*:"+str(a.idaStarNodes)
+#  print ""
   
-else:
-  print "Path doesnt exist. Try again."
+#else:
+#  print "Path doesnt exist. Try again."
 
 
