@@ -191,7 +191,7 @@ class brickWorld():
       print currentCell
       currentCell = currentCell.parent
   
-  ##returns changed heuristic, part is place where heuristic are real values
+  ##returns changed heuristic, part is place where heuristic are exact values
   ##possible noise types: gauss, optimistic_gauss
   ##possible part types: start, center, end
   def changeHeuristic(self, noise, part, percentage):
