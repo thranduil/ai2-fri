@@ -1,8 +1,9 @@
-import random
+import random, hashlib
 from Cell import cell
 import time
 
 Infinity = 1e10000
+
 
 class brickWorld():
   world = None
@@ -21,7 +22,6 @@ class brickWorld():
     self.mapSize = size
     self.density = density
     self.createBrickWorld()
-    #self.printPriceWorld(self.priceWorld)
     
   ##create world with random bricks in it
   ##1 is block,0 is empty space, 2 is finish, 3 is start 
@@ -41,14 +41,12 @@ class brickWorld():
     self.setCell(self.priceWorld,1,1,0)
     
     #fill the map with random walls
-    
     for i in range(self.density):
       x,y = random.randint(1,self.mapSize-2),random.randint(1,self.mapSize-2)
       if x == 1 and y == 1 or x == self.mapSize-2 and y == self.mapSize-2:
         continue
       self.setCell(self.world,y,x,1)
     self.computePrices(1,1,self.priceWorld)
-    return self
   
   ##recursively compute distance from finish for every cell
   def computePrices(self,x,y,priceWorld):
@@ -191,7 +189,7 @@ class brickWorld():
       print currentCell
       currentCell = currentCell.parent
   
-  ##returns changed heuristic, part is place where heuristic are exact values
+  ##returns changed heuristic, part is place where heuristic are real values
   ##possible noise types: gauss, optimistic_gauss
   ##possible part types: start, center, end
   def changeHeuristic(self, noise, part, percentage):
@@ -250,11 +248,8 @@ def testingHeuristic(noOfExamples):
   
   i=0
   while i<noOfExamples:
-    temp1=brickWorld(20,70).createBrickWorld()
-    temp2=brickWorld(20,70).createBrickWorld()
-    maps.append(temp1)
-    maps.append(temp2)
-    i+=2
+    maps.append(brickWorld(20,50))
+    i+=1
     #print i
     #temp = brickWorld(20,70)
     #temp.createBrickWorld()
@@ -266,8 +261,13 @@ def testingHeuristic(noOfExamples):
     #else:
       #temp.printPriceWorld(temp.priceWorld)
     #del(temp)
-    maps[-1].printPriceWorld(maps[-1].priceWorld)
-    maps[-2].printPriceWorld(maps[-1].priceWorld)
+    
+    
+		
+  for maps1 in maps:
+    print maps1
+    print id(maps1.priceWorld)
+    print hashlib.md5(str(maps1.priceWorld)).hexdigest()
     print ""
     
   
@@ -312,17 +312,34 @@ def testingHeuristic(noOfExamples):
 #  print ""
 #  brickWorld(20,70)
 #  print"\n----\n"
-  
-for i in range(20):
+
+idealA = []
+idealIDA = []
+
+startA = []
+startIDA = []
+centerA = []
+centerIDA = []
+endA = []
+endIDA = []
+
+a = brickWorld(20,40)
+a.printWorld()
+print "-----"
+a.printPriceWorld(a.priceWorld)
+
+for i in range(250):
   a = brickWorld(20,70)
   #a.createBrickWorld()
-  
+
   if a.pathExist()==True:
     a.aStarSearch(a.priceWorld)
     a.idaStarSearch(a.priceWorld)
-    print "a*:"+str(a.aStarCheckedNodes)
-    print "ida*:"+str(a.idaStarNodes)
-    print ""
+    idealA.append(a.aStarCheckedNodes)
+    idealIDA.append(a.idaStarNodes)
+    #print "a*:"+str(a.aStarCheckedNodes)
+    #print "ida*:"+str(a.idaStarNodes)
+    #print ""
     
     start = a.changeHeuristic('optimistic_gauss','start',10)
     center = a.changeHeuristic('optimistic_gauss','center',10)
@@ -330,23 +347,51 @@ for i in range(20):
         
     a.aStarSearch(start)
     a.idaStarSearch(start)
-    print "start a*:"+str(a.aStarCheckedNodes)
-    print "start ida*:"+str(a.idaStarNodes)
-    print ""   
+    startA.append(a.aStarCheckedNodes)
+    startIDA.append(a.idaStarNodes)
+    #print "start a*:"+str(a.aStarCheckedNodes)
+    #print "start ida*:"+str(a.idaStarNodes)
+    #print ""   
     
     a.aStarSearch(center)
     a.idaStarSearch(center)
-    print "center a*:"+str(a.aStarCheckedNodes)
-    print "center ida*:"+str(a.idaStarNodes)
-    print ""
+    centerA.append(a.aStarCheckedNodes)
+    centerIDA.append(a.idaStarNodes)
+    #print "center a*:"+str(a.aStarCheckedNodes)
+    #print "center ida*:"+str(a.idaStarNodes)
+    #print ""
           
     a.aStarSearch(end)
     a.idaStarSearch(end)
-    print "end a*:"+str(a.aStarCheckedNodes)
-    print "end ida*:"+str(a.idaStarNodes)
-    print ""
+    endA.append(a.aStarCheckedNodes)
+    endIDA.append(a.idaStarNodes)
+    #print "end a*:"+str(a.aStarCheckedNodes)
+    #print "end ida*:"+str(a.idaStarNodes)
+    #print ""
     
   else:
     print "Path doesnt exist. Try again."
 
+
+f = file("test.txt","w")
+for i in range(len(idealA)):
+  f.write(str(idealA[i])+","+str(idealIDA[i])+","+str(startA[i])+","+str(startIDA[i])+","+str(centerA[i])+","+str(centerIDA[i])+","+str(endA[i])+","+str(endIDA[i])+"\n")
+  
+f.close()
+print "idealA"
+print idealA
+print "idealIDa"
+print idealIDA
+print "startA"
+print startA
+print "startIDA"
+print startIDA
+print "centerA"
+print centerA
+print "centerIDA"
+print centerIDA
+print "endA"
+print endA
+print "endIDA"
+print endIDA
 
