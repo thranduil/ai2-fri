@@ -10,6 +10,10 @@ class brickWorld():
   mapSize = 0
   density = 0
   
+  #hard-coded starting point and (offset for) finish point
+  startPoint = (4,4)
+  finishPoint = (-6,-6)
+  
   aStarCheckedNodes = 0
   aStarOpenNodes = 0
   
@@ -39,18 +43,18 @@ class brickWorld():
       self.priceWorld.append('#')
       
     #add finish and starting cell
-    self.setCell(self.world,4,4,2)
-    self.setCell(self.world,self.mapSize-6,self.mapSize-6,3)
+    self.setCell(self.world,self.startPoint[0],self.startPoint[1],2)
+    self.setCell(self.world,self.mapSize+self.finishPoint[0],self.mapSize+self.finishPoint[1],3)
     self.setCell(self.priceWorld,4,4,0)
     
     #fill the map with random walls
     for i in range(self.density):
       x,y = random.randint(1,self.mapSize-2),random.randint(1,self.mapSize-2)
       #skip the finish and starting point
-      if x == 4 and y == 4 or x == self.mapSize-6 and y == self.mapSize-6:
+      if x == self.startPoint[0] and y == self.startPoint[1] or x == self.mapSize+self.finishPoint[0] and y == self.mapSize+self.finishPoint[1]:
         continue
       self.setCell(self.world,y,x,1)
-    self.computePrices(4,4,self.priceWorld)
+    self.computePrices(self.startPoint[0],self.startPoint[1],self.priceWorld)
   
   ##recursively compute distance from finish point(x,y) for every cell
   def computePrices(self,x,y,priceWorld):
@@ -100,7 +104,7 @@ class brickWorld():
   
   ##checks if path for current world from start to finish point exists
   def pathExist(self):
-    if self.getCell(self.priceWorld,self.mapSize-2,self.mapSize-2) == '#':
+    if self.getCell(self.priceWorld,self.mapSize+self.finishPoint[0],self.mapSize+self.finishPoint[1]) == '#':
       return False
     else:
       return True
@@ -120,14 +124,14 @@ class brickWorld():
     openList = set()
     closedList = set()
     #current - start cell
-    current = cell(self.mapSize-2,self.mapSize-2,None,self.getCell(heuristic,self.mapSize-2,self.mapSize-2))
+    current = cell(self.mapSize+self.finishPoint[0],self.mapSize+self.finishPoint[1],None,self.getCell(heuristic,self.mapSize+self.finishPoint[0],self.mapSize+self.finishPoint[1]))
     openList.add(current)
     
     while openList:
       temp = sorted(openList, key = lambda cell:cell.getG(), reverse=True)
       current = sorted(temp, key = lambda cell:cell.getF())[0]
 
-      if current.getXY() == (1,1):
+      if current.getXY() == self.startPoint:
         #print "A* closed list:"+str(len(closedList))
         #print len(openList)
         self.aStarCheckedNodes = len(closedList)
@@ -146,7 +150,7 @@ class brickWorld():
   ##preform IDA* search on given map from start to finish point
   def idaStarSearch(self, heuristic):
     #start cell
-    rootNode = cell(self.mapSize-2,self.mapSize-2,None,self.getCell(heuristic,self.mapSize-2,self.mapSize-2))
+    rootNode = cell(self.mapSize+self.finishPoint[0],self.mapSize+self.finishPoint[1],None,self.getCell(heuristic,self.mapSize+self.finishPoint[0],self.mapSize+self.finishPoint[1]))
     costLimit = rootNode.getH()
     self.idaStarNodes = 0
     while True:
@@ -161,7 +165,7 @@ class brickWorld():
     minimumCost = startCost + node.getH()
     if minimumCost > costLimit:
       return (None, minimumCost)
-    if node.getXY() == (1,1):
+    if node.getXY() == self.startPoint:
       return (currentPath, costLimit)
  
     nextCostLimit = Infinity
@@ -202,7 +206,7 @@ class brickWorld():
     for i in self.priceWorld:
       newHeuristic.append(i)
     
-    path_length = self.getCell(self.priceWorld,self.mapSize-2,self.mapSize-2)
+    path_length = self.getCell(self.priceWorld,self.mapSize+self.finishPoint[0],self.mapSize+self.finishPoint[1])
     
     for i in range(0, self.mapSize-1):
       for j in range(0, self.mapSize-1):

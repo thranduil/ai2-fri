@@ -1,4 +1,9 @@
 import bricksWorld
+import logging
+
+
+# Log everything, and send it to stderr.
+logging.basicConfig(level=logging.DEBUG)
 
 def main():
     idealA = []
@@ -77,9 +82,22 @@ def main():
 
 def test():
     testMap = None
-    testMap = bricksWorld.brickWorld(20,140)
+    testMap = bricksWorld.brickWorld(20,100)
+    testMap.printWorld()
+    testMap.printPriceWorld(testMap.priceWorld)
     
+    logging.debug("making heuristics")
+    start = testMap.changeHeuristic('optimistic_gauss','start',10)
+    center = testMap.changeHeuristic('optimistic_gauss','center',10)
+    end = testMap.changeHeuristic('optimistic_gauss','end',10)
     
-test()
-#main()
+    logging.debug("preforming A*")
+    testMap.aStarSearch(start)
+    logging.debug("preforming ida*")
+    testMap.idaStarSearch(start)
     
+    print testMap.aStarCheckedNodes
+    print testMap.idaStarNodes
+    
+
+if __name__ == "__main__":test()
