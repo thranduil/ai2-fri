@@ -4,7 +4,6 @@ import time
 
 Infinity = 1e10000
 
-
 class brickWorld():
   world = None
   priceWorld = None
@@ -22,10 +21,14 @@ class brickWorld():
     self.mapSize = size
     self.density = density
     self.createBrickWorld()
+    while not self.pathExist():
+        self.createBrickWorld()
     
   ##create world with random bricks in it
   ##1 is block,0 is empty space, 2 is finish, 3 is start 
   def createBrickWorld(self):
+    self.world = []
+    self.priceWorld = []
     for i in range(self.mapSize*self.mapSize):
       #adds border
       if i<self.mapSize or i%self.mapSize == 0 or i%self.mapSize == self.mapSize-1 or i/self.mapSize==self.mapSize-1:
@@ -36,19 +39,20 @@ class brickWorld():
       self.priceWorld.append('#')
       
     #add finish and starting cell
-    self.setCell(self.world,1,1,2)
-    self.setCell(self.world,self.mapSize-2,self.mapSize-2,3)
-    self.setCell(self.priceWorld,1,1,0)
+    self.setCell(self.world,4,4,2)
+    self.setCell(self.world,self.mapSize-6,self.mapSize-6,3)
+    self.setCell(self.priceWorld,4,4,0)
     
     #fill the map with random walls
     for i in range(self.density):
       x,y = random.randint(1,self.mapSize-2),random.randint(1,self.mapSize-2)
-      if x == 1 and y == 1 or x == self.mapSize-2 and y == self.mapSize-2:
+      #skip the finish and starting point
+      if x == 4 and y == 4 or x == self.mapSize-6 and y == self.mapSize-6:
         continue
       self.setCell(self.world,y,x,1)
-    self.computePrices(1,1,self.priceWorld)
+    self.computePrices(4,4,self.priceWorld)
   
-  ##recursively compute distance from finish for every cell
+  ##recursively compute distance from finish point(x,y) for every cell
   def computePrices(self,x,y,priceWorld):
     if self.getCell(self.world,x,y) == 1:
       return
@@ -242,151 +246,3 @@ class brickWorld():
               self.setCell(newHeuristic, i, j, new_h)
     
     return newHeuristic
-
-def testingHeuristic(noOfExamples):
-  maps = []
-  
-  i=0
-  while i<noOfExamples:
-    maps.append(brickWorld(20,50))
-    i+=1
-    #print i
-    #temp = brickWorld(20,70)
-    #temp.createBrickWorld()
-    #if temp.pathExist() == True:
-      #temp.printPriceWorld(temp.priceWorld)
-      #print ""
-      #maps.append(temp)
-      #i+=1
-    #else:
-      #temp.printPriceWorld(temp.priceWorld)
-    #del(temp)
-    
-    
-		
-  for maps1 in maps:
-    print maps1
-    print id(maps1.priceWorld)
-    print hashlib.md5(str(maps1.priceWorld)).hexdigest()
-    print ""
-    
-  
-  realData = []
-  startH = []
-  centerH = []
-  endH = []
-  
-  for m in maps:
-    m.aStarSearch(m.priceWorld)
-    print "a"
-    m.idaStarSearch(m.priceWorld)
-    print "ida"
-    realData.append((m.aStarCheckedNodes, m.idaStarNodes))
-    
-    #start = m.changeHeuristic('optimistic_gauss','start',10)
-    #center = m.changeHeuristic('optimistic_gauss','center',10)
-    #end = m.changeHeuristic('optimistic_gauss','end',10)
-    
-    #m.aStarSearch(start)
-    #m.idaStarSearch(start)
-    #startH.append((m.aStarCheckedNodes, m.idaStarNodes))
-    
-    #m.aStarSearch(center)
-    #m.idaStarSearch(center)
-    #centerH.append((m.aStarCheckedNodes, m.idaStarNodes))
-    
-    #m.aStarSearch(end)
-    #m.idaStarSearch(end)
-    #endH.append((m.aStarCheckedNodes, m.idaStarNodes))
-    
-  for a  in realData:
-    print a
-
-#random.seed(int(time.time()))  
-#testingHeuristic(5)
-
-#for i in range(1):
-#  brickWorld(25,70)
-#  print ""
-#  brickWorld(30,70)
-#  print ""
-#  brickWorld(20,70)
-#  print"\n----\n"
-
-idealA = []
-idealIDA = []
-
-startA = []
-startIDA = []
-centerA = []
-centerIDA = []
-endA = []
-endIDA = []
- 
-for i in range(250):
-  a = brickWorld(20,140)
-  #a.createBrickWorld()
-
-  if a.pathExist()==True:
-    a.aStarSearch(a.priceWorld)
-    a.idaStarSearch(a.priceWorld)
-    idealA.append(a.aStarCheckedNodes)
-    idealIDA.append(a.idaStarNodes)
-    #print "a*:"+str(a.aStarCheckedNodes)
-    #print "ida*:"+str(a.idaStarNodes)
-    #print ""
-    
-    start = a.changeHeuristic('optimistic_gauss','start',10)
-    center = a.changeHeuristic('optimistic_gauss','center',10)
-    end = a.changeHeuristic('optimistic_gauss','end',10)
-        
-    a.aStarSearch(start)
-    a.idaStarSearch(start)
-    startA.append(a.aStarCheckedNodes)
-    startIDA.append(a.idaStarNodes)
-    #print "start a*:"+str(a.aStarCheckedNodes)
-    #print "start ida*:"+str(a.idaStarNodes)
-    #print ""   
-    
-    a.aStarSearch(center)
-    a.idaStarSearch(center)
-    centerA.append(a.aStarCheckedNodes)
-    centerIDA.append(a.idaStarNodes)
-    #print "center a*:"+str(a.aStarCheckedNodes)
-    #print "center ida*:"+str(a.idaStarNodes)
-    #print ""
-          
-    a.aStarSearch(end)
-    a.idaStarSearch(end)
-    endA.append(a.aStarCheckedNodes)
-    endIDA.append(a.idaStarNodes)
-    #print "end a*:"+str(a.aStarCheckedNodes)
-    #print "end ida*:"+str(a.idaStarNodes)
-    #print ""
-    
-  else:
-    print "Path doesnt exist. Try again."
-
-
-f = file("test.txt","w")
-for i in range(len(idealA)):
-  f.write(str(idealA[i])+","+str(idealIDA[i])+","+str(startA[i])+","+str(startIDA[i])+","+str(centerA[i])+","+str(centerIDA[i])+","+str(endA[i])+","+str(endIDA[i])+"\n")
-  
-f.close()
-print "idealA"
-print idealA
-print "idealIDa"
-print idealIDA
-print "startA"
-print startA
-print "startIDA"
-print startIDA
-print "centerA"
-print centerA
-print "centerIDA"
-print centerIDA
-print "endA"
-print endA
-print "endIDA"
-print endIDA
-
