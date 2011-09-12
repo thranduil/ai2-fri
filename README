@@ -1,7 +1,8 @@
 AI2 project - where to improve heuristic
 
-Waiting for Saša did not work out... yet :)
-
 TODO:
 	-@bricksWorld: move start and end point more to the center
 	-@bricksWorld: experiment with different map size and amount of noise
+	
+	-@puzzleSearch: write and test A* and IDA*
+	-@puzzleSearch: apply noise to database heuristic
