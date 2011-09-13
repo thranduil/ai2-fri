@@ -17,7 +17,7 @@ class brickWorld():
   aStarCheckedNodes = 0
   aStarOpenNodes = 0
   
-  idaStarNodes = 0
+  idaStarSet = set()
   
   def __init__(self, size,density):
     self.world = []
@@ -152,7 +152,7 @@ class brickWorld():
     #start cell
     rootNode = cell(self.mapSize+self.finishPoint[0],self.mapSize+self.finishPoint[1],None,self.getCell(heuristic,self.mapSize+self.finishPoint[0],self.mapSize+self.finishPoint[1]))
     costLimit = rootNode.getH()
-    self.idaStarNodes = 0
+    self.idaStarSet.clear()
     while True:
       (solution, costLimit) = self.DFS(0, rootNode, costLimit, [rootNode],heuristic)
       if solution != None:
@@ -162,15 +162,15 @@ class brickWorld():
  
   ##depth first search for IDA*
   def DFS(self, startCost, node, costLimit, currentPath, heuristic):
+    self.idaStarSet.add(node.getXY())
     minimumCost = startCost + node.getH()
     if minimumCost > costLimit:
       return (None, minimumCost)
     if node.getXY() == self.startPoint:
       return (currentPath, costLimit)
- 
+      
     nextCostLimit = Infinity
     for succNode in self.getNeighborCell(node, heuristic):
-      self.idaStarNodes += 1
       newStartCost = startCost + 1
       (solution, newCostLimit) = self.DFS(newStartCost, succNode, costLimit, currentPath + [succNode],heuristic)
       if solution != None:
@@ -269,3 +269,7 @@ class brickWorld():
             print "  ",
           else:
             print '%02d'%(self.priceWorld[i]-newHeuristic[i]),
+  
+  def getIdaStarNodes(self):
+    return len(self.idaStarSet)
+    

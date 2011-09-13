@@ -100,7 +100,7 @@ def test():
     testMap.idaStarSearch(start)
     
     print testMap.aStarCheckedNodes
-    print testMap.idaStarNodes
+    print testMap.getIdaStarNodes()
     
 
 if __name__ == "__main__":test()
