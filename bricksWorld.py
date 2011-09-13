@@ -23,8 +23,9 @@ class brickWorld():
     self.world = []
     self.priceWorld = []
     self.mapSize = size
-    self.density = density
+    self.density = int((size-2)*(size-2)*float(density)/100)
     self.createBrickWorld()
+    #trying to make world until path from start to end exists
     while not self.pathExist():
         self.createBrickWorld()
     

@@ -3,7 +3,8 @@ import logging
 
 
 # Log everything, and send it to stderr.
-logging.basicConfig(level=logging.DEBUG)
+FORMAT = '%(asctime)s %(levelname)s %(message)s'
+logging.basicConfig(format=FORMAT, datefmt='%H:%M:%S', level=logging.DEBUG)
 
 def main():
     idealA = []
@@ -81,26 +82,61 @@ def main():
 
 
 def test():
+    ##parameters for running tests
+    mapSize=[15,20,25]
+    mapBricksAmount=[20,40,60,80]
+    heuristic_type=['optimistic_gauss', 'gauss']
+    noise_amount=[10,20,40,60]
+    iterationNo = 10
+    
+    test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iterationNo)
+
+##
+##preform search on brickWorld with given parameters   
+##    
+def test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iterationNo):
     testMap = None
-    testMap = bricksWorld.brickWorld(30,50)
-    testMap.printWorld()
+    for size in mapSize:
+        for brickPercentage in mapBricksAmount:
+            for heuristic in heuristic_type:
+                for noise in noise_amount:
+                    result_a_i,result_a_s,result_a_c,result_a_e = 0,0,0,0
+                    result_ida_i,result_ida_s,result_ida_c,result_ida_e = 0,0,0,0
+                    for iteration in range(iterationNo):
     
-    logging.debug("making heuristics")
-    start = testMap.changeHeuristic('optimistic_gauss','start',20)
-    center = testMap.changeHeuristic('optimistic_gauss','center',20)
-    end = testMap.changeHeuristic('optimistic_gauss','end',20)
-    
-    testMap.compareHouristics(start)
-    testMap.compareHouristics(center)
-    testMap.compareHouristics(end)
-    
-    logging.debug("preforming A*")
-    testMap.aStarSearch(start)
-    logging.debug("preforming ida*")
-    testMap.idaStarSearch(start)
-    
-    print testMap.aStarCheckedNodes
-    print testMap.getIdaStarNodes()
-    
+                        #size in one demension and density in %
+                        testMap = bricksWorld.brickWorld(size,brickPercentage)
+
+                        start = testMap.changeHeuristic(heuristic,'start',noise)
+                        center = testMap.changeHeuristic(heuristic,'center',noise)
+                        end = testMap.changeHeuristic(heuristic,'end',noise)
+
+                        logging.debug("Preforming A*")
+                        testMap.aStarSearch(testMap.priceWorld)
+                        result_a_i = result_a_i + testMap.aStarCheckedNodes
+                        testMap.aStarSearch(start)
+                        result_a_s = result_a_s + testMap.aStarCheckedNodes
+                        testMap.aStarSearch(center)
+                        result_a_c = result_a_c + testMap.aStarCheckedNodes
+                        testMap.aStarSearch(end)
+                        result_a_e = result_a_e + testMap.aStarCheckedNodes
+                        
+                        logging.debug("Preforming IDA*")
+                        testMap.idaStarSearch(testMap.priceWorld)
+                        result_ida_i = result_ida_i + testMap.getIdaStarNodes()
+                        testMap.idaStarSearch(start)
+                        result_ida_s = result_ida_s + testMap.getIdaStarNodes()
+                        testMap.idaStarSearch(center)
+                        result_ida_c = result_ida_c + testMap.getIdaStarNodes()
+                        testMap.idaStarSearch(end)
+                        result_ida_e = result_ida_e + testMap.getIdaStarNodes()
+                    
+                    f = file("results/brick_size%s_%sproc_%s_%sproc.txt"%(size,brickPercentage,heuristic,noise),"w")
+                    f.write("ideal A*:"+str(float(result_a_i)/iterationNo)+"\t\tideal IDA*:"+str(float(result_ida_i)/iterationNo)+"\n")
+                    f.write("start A*:"+str(float(result_a_s)/iterationNo)+"\t\tstart IDA*:"+str(float(result_ida_s)/iterationNo)+"\n")
+                    f.write("center A*:"+str(float(result_a_c)/iterationNo)+"\t\tcenter IDA*:"+str(float(result_ida_c)/iterationNo)+"\n")
+                    f.write("end A*:"+str(float(result_a_e)/iterationNo)+"\t\tend IDA*:"+str(float(result_ida_e)/iterationNo)+"\n")
+                    f.close()
+                    logging.info("Write completed: brick_size%s_%sproc_%s_%sproc.txt"%(size,brickPercentage,heuristic,noise))
 
 if __name__ == "__main__":test()
