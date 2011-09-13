@@ -12,7 +12,7 @@ class brickWorld():
   
   #hard-coded starting point and (offset for) finish point
   startPoint = (4,4)
-  finishPoint = (-6,-6)
+  finishPoint = (-5,-5)
   
   aStarCheckedNodes = 0
   aStarOpenNodes = 0
@@ -250,3 +250,22 @@ class brickWorld():
               self.setCell(newHeuristic, i, j, new_h)
     
     return newHeuristic
+    
+  def compareHouristics(self, newHeuristic):
+    for i in range(self.mapSize*self.mapSize):
+      if i%self.mapSize == self.mapSize-1:
+        if self.priceWorld[i] == '#':
+          print self.priceWorld[i]+'#'
+        else:
+          if self.priceWorld[i]-newHeuristic[i] == 0:
+            print "  "
+          else:
+            print '%02d'%i(self.priceWorld[i]-newHeuristic[i])
+      else:
+        if self.priceWorld[i] == '#':
+          print self.priceWorld[i]+'#',
+        else:
+          if self.priceWorld[i]-newHeuristic[i] == 0:
+            print "  ",
+          else:
+            print '%02d'%(self.priceWorld[i]-newHeuristic[i]),

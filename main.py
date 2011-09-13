@@ -82,14 +82,17 @@ def main():
 
 def test():
     testMap = None
-    testMap = bricksWorld.brickWorld(20,100)
+    testMap = bricksWorld.brickWorld(30,50)
     testMap.printWorld()
-    testMap.printPriceWorld(testMap.priceWorld)
     
     logging.debug("making heuristics")
-    start = testMap.changeHeuristic('optimistic_gauss','start',10)
-    center = testMap.changeHeuristic('optimistic_gauss','center',10)
-    end = testMap.changeHeuristic('optimistic_gauss','end',10)
+    start = testMap.changeHeuristic('optimistic_gauss','start',20)
+    center = testMap.changeHeuristic('optimistic_gauss','center',20)
+    end = testMap.changeHeuristic('optimistic_gauss','end',20)
+    
+    testMap.compareHouristics(start)
+    testMap.compareHouristics(center)
+    testMap.compareHouristics(end)
     
     logging.debug("preforming A*")
     testMap.aStarSearch(start)
