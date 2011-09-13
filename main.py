@@ -86,7 +86,7 @@ def test():
     mapSize=[15,20,25]
     mapBricksAmount=[20,40,60,80]
     heuristic_type=['optimistic_gauss', 'gauss']
-    noise_amount=[10,20,40,60]
+    noise_amount=[20,40,60]
     iterationNo = 10
     
     test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iterationNo)
@@ -96,12 +96,13 @@ def test():
 ##    
 def test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iterationNo):
     testMap = None
-    for size in mapSize:
-        for brickPercentage in mapBricksAmount:
-            for heuristic in heuristic_type:
+    for heuristic in heuristic_type:
+        for size in mapSize:
+            for brickPercentage in mapBricksAmount:
                 for noise in noise_amount:
                     result_a_i,result_a_s,result_a_c,result_a_e = 0,0,0,0
                     result_ida_i,result_ida_s,result_ida_c,result_ida_e = 0,0,0,0
+                    result_ida_ie,result_ida_se,result_ida_ce,result_ida_ee = 0,0,0,0
                     for iteration in range(iterationNo):
     
                         #size in one demension and density in %
@@ -110,7 +111,11 @@ def test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iter
                         start = testMap.changeHeuristic(heuristic,'start',noise)
                         center = testMap.changeHeuristic(heuristic,'center',noise)
                         end = testMap.changeHeuristic(heuristic,'end',noise)
-
+                        
+                        testMap.heuristicTestNegative(start)
+                        testMap.heuristicTestNegative(center)
+                        testMap.heuristicTestNegative(end)
+                        
                         logging.debug("Preforming A*")
                         testMap.aStarSearch(testMap.priceWorld)
                         result_a_i = result_a_i + testMap.aStarCheckedNodes
@@ -123,19 +128,23 @@ def test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iter
                         
                         logging.debug("Preforming IDA*")
                         testMap.idaStarSearch(testMap.priceWorld)
-                        result_ida_i = result_ida_i + testMap.getIdaStarNodes()
+                        result_ida_i = result_ida_i + testMap.idaStarNodes
+                        result_ida_ie = result_ida_ie + testMap.getIdaStarNodes()
                         testMap.idaStarSearch(start)
-                        result_ida_s = result_ida_s + testMap.getIdaStarNodes()
+                        result_ida_s = result_ida_s + testMap.idaStarNodes
+                        result_ida_se = result_ida_se + testMap.getIdaStarNodes()
                         testMap.idaStarSearch(center)
-                        result_ida_c = result_ida_c + testMap.getIdaStarNodes()
+                        result_ida_c = result_ida_c + testMap.idaStarNodes
+                        result_ida_ce = result_ida_ce + testMap.getIdaStarNodes()
                         testMap.idaStarSearch(end)
-                        result_ida_e = result_ida_e + testMap.getIdaStarNodes()
+                        result_ida_e = result_ida_e + testMap.idaStarNodes
+                        result_ida_ee = result_ida_ee + testMap.getIdaStarNodes()
                     
                     f = file("results/brick_size%s_%sproc_%s_%sproc.txt"%(size,brickPercentage,heuristic,noise),"w")
-                    f.write("ideal A*:"+str(float(result_a_i)/iterationNo)+"\t\tideal IDA*:"+str(float(result_ida_i)/iterationNo)+"\n")
-                    f.write("start A*:"+str(float(result_a_s)/iterationNo)+"\t\tstart IDA*:"+str(float(result_ida_s)/iterationNo)+"\n")
-                    f.write("center A*:"+str(float(result_a_c)/iterationNo)+"\t\tcenter IDA*:"+str(float(result_ida_c)/iterationNo)+"\n")
-                    f.write("end A*:"+str(float(result_a_e)/iterationNo)+"\t\tend IDA*:"+str(float(result_ida_e)/iterationNo)+"\n")
+                    f.write("ideal A*:"+str(float(result_a_i)/iterationNo)+"\t\tideal IDA*:"+str(float(result_ida_i)/iterationNo)+"\t\t(expand)ideal IDA*:"+str(float(result_ida_ie)/iterationNo)+"\n")
+                    f.write("start A*:"+str(float(result_a_s)/iterationNo)+"\t\tstart IDA*:"+str(float(result_ida_s)/iterationNo)+"\t\t(expand)start IDA*:"+str(float(result_ida_se)/iterationNo)+"\n")
+                    f.write("center A*:"+str(float(result_a_c)/iterationNo)+"\t\tcenter IDA*:"+str(float(result_ida_c)/iterationNo)+"\t\t(expand)center IDA*:"+str(float(result_ida_ce)/iterationNo)+"\n")
+                    f.write("end A*:"+str(float(result_a_e)/iterationNo)+"\t\tend IDA*:"+str(float(result_ida_e)/iterationNo)+"\t\t(expand)end IDA*:"+str(float(result_ida_ee)/iterationNo)+"\n")
                     f.close()
                     logging.info("Write completed: brick_size%s_%sproc_%s_%sproc.txt"%(size,brickPercentage,heuristic,noise))
 
