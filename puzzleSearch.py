@@ -1,9 +1,10 @@
 from tile import Position
 from puzzleState import State
+import random
 import time
 
 
-def aStarSearch(start_state, heuristic):#, exact_part, noise_type, noise_magnitude):
+def aStarSearch(start_state, heuristic, exact_part, noise_type, noise_magnitude):
     #in open list we put cells that we are going to look
     #in closed list we put tuple (x,y) coordinates of cells that we already looked
     openList = set()
@@ -25,19 +26,20 @@ def aStarSearch(start_state, heuristic):#, exact_part, noise_type, noise_magnitu
         return
       openList.remove(current)
       closedList.add(current)
-      neighbors = getNeighborStates(current,heuristic)
+      neighbors = getNeighborStates(current,heuristic, start_state.getH(), exact_part, noise_type, noise_magnitude)
       for n in neighbors:
         if n not in closedList:
           openList.add(n)
     print "Fail to find path"
 
 
-def getNeighborStates(start_position, heuristic):
+def getNeighborStates(start_position, heuristic, solution_length, exact_part, noise_type, noise_magnitude):
   neighbors=[]
   nexts = start_position.getNeighborPositions()
-  print nexts
+  
   for next in nexts:
-    neighbors.append(State(next,start_position,heuristic[next]))
+    noisy_h = distortHeuristic(heuristic[next], solution_length, exact_part, noise_type, noise_magnitude)
+    neighbors.append(State(next,start_position,noisy_h))
   return neighbors
 
 
@@ -53,12 +55,37 @@ def exactHeuristic():
   return heuristic
 
 
-def distortHeuristic(h, noise_type, noise_magnitude):
+def distortHeuristic(h, solution_length, exact_part, noise_type, noise_magnitude):
+  new_h = h
   
+  if exact_part == 'start':
+    if h > round(solution_length/3):
+      new_h = calculateNoise(h, noise_type, noise_magnitude)
+      
+  elif exact_part == 'middle':
+    if h < round(solution_length/3) or h > round(2*solution_length/3):
+      new_h = calculateNoise(h, noise_type, noise_magnitude)
+      
+  elif exact_part == 'end':
+    if h < round(2*solution_length/3):
+      new_h = calculateNoise(h, noise_type, noise_magnitude)
+      
+  return new_h
+
+
+def calculateNoise(h, noise_type, noise_magnitude):
+  x = h
   
-  noisy_heuristic = {'123456780':0}
+  if noise_type == 'gauss':
+    x = int(round(random.gauss(h,float(h)*noise_magnitude)))
+    
+  elif noise_type == 'optimistic_gauss':
+    x=h+1
+    while x > h:
+      x = int(round(random.gauss(h,float(h)*noise_magnitude)))
   
-  return noisy_heuristic
+  return x
+
 
 ## sumljenje hevristike
 
@@ -70,7 +97,7 @@ h = exactHeuristic()
 print 'nalaganje hevristike:', time.clock()-start
 print '---'
 start = time.clock()
-aStarSearch(State('012345678',None,22),h)
+aStarSearch(State('012345678',None,22), h, 'start', 'no_noise', 0.20)
 print 'A* alg:', time.clock()-start
 
 
