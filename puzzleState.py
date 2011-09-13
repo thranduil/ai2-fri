@@ -1,3 +1,4 @@
+from copy import copy
 
 ## Description of a state of 8-puzzle (locations of tiles)
 ## for the use in A* and IDA* search
@@ -40,47 +41,48 @@ class State():
     print self.position[6:]
     
   ## possible moves
-  def getNeighborStates(self):
+  def getNeighborPositions(self):
     pos = list(self.position)
     empty = pos.index('0')
-    neighbours = []
-    temp = pos
+    neighbors = []
+    temp = copy(pos)
     if empty==0:
-      pos[0]=pos[1]; pos[1]='0'; neighbours.append("".join(pos));
-      pos = temp; pos[0]=pos[3]; pos[3]='0'; neighbours.append("".join(pos));
+      pos[0]=pos[1]; pos[1]='0'; neighbors.append("".join(pos));
+      pos = copy(temp); pos[0]=pos[3]; pos[3]='0'; neighbors.append("".join(pos));
     elif empty==1:
-      pos[1]=pos[0]; pos[0]='0'; neighbours.append("".join(pos));
-      pos = temp; pos[1]=pos[4]; pos[4]='0'; neighbours.append("".join(pos));
-      pos = temp; pos[1]=pos[2]; pos[2]='0'; neighbours.append("".join(pos));
+      pos[1]=pos[0]; pos[0]='0'; neighbors.append("".join(pos));
+      pos = copy(temp); pos[1]=pos[4]; pos[4]='0'; neighbors.append("".join(pos));
+      pos = copy(temp); pos[1]=pos[2]; pos[2]='0'; neighbors.append("".join(pos));
     elif empty==2:
-      pos[2]=pos[1]; pos[1]='0'; neighbours.append("".join(pos));
-      pos = temp; pos[2]=pos[5]; pos[5]='0'; neighbours.append("".join(pos));
+      pos[2]=pos[1]; pos[1]='0'; neighbors.append("".join(pos));
+      pos = copy(temp); pos[2]=pos[5]; pos[5]='0'; neighbors.append("".join(pos));
     elif empty==3:
-      pos[3]=pos[0]; pos[0]='0'; neighbours.append("".join(pos));
-      pos = temp; pos[3]=pos[4]; pos[4]='0'; neighbours.append("".join(pos));
-      pos = temp; pos[3]=pos[6]; pos[6]='0'; neighbours.append("".join(pos));
+      pos[3]=pos[0]; pos[0]='0'; neighbors.append("".join(pos));
+      pos = copy(temp); pos[3]=pos[4]; pos[4]='0'; neighbors.append("".join(pos));
+      pos = copy(temp); pos[3]=pos[6]; pos[6]='0'; neighbors.append("".join(pos));
     elif empty==4:
-      pos[4]=pos[3]; pos[3]='0'; neighbours.append("".join(pos));
-      pos = temp; pos[4]=pos[1]; pos[1]='0'; neighbours.append("".join(pos));
-      pos = temp; pos[4]=pos[5]; pos[5]='0'; neighbours.append("".join(pos));
-      pos = temp; pos[4]=pos[7]; pos[5]='0'; neighbours.append("".join(pos));
+      pos[4]=pos[3]; pos[3]='0'; neighbors.append("".join(pos));
+      pos = copy(temp); pos[4]=pos[1]; pos[1]='0'; neighbors.append("".join(pos));
+      pos = copy(temp); pos[4]=pos[5]; pos[5]='0'; neighbors.append("".join(pos));
+      pos = copy(temp); pos[4]=pos[7]; pos[7]='0'; neighbors.append("".join(pos));
     elif empty==5:
-      pos[5]=pos[2]; pos[2]='0'; neighbours.append("".join(pos));
-      pos = temp; pos[5]=pos[4]; pos[4]='0'; neighbours.append("".join(pos));
-      pos = temp; pos[5]=pos[8]; pos[8]='0'; neighbours.append("".join(pos));
+      pos[5]=pos[2]; pos[2]='0'; neighbors.append("".join(pos));
+      pos = copy(temp); pos[5]=pos[4]; pos[4]='0'; neighbors.append("".join(pos));
+      pos = copy(temp); pos[5]=pos[8]; pos[8]='0'; neighbors.append("".join(pos));
     elif empty==6:
-      pos[6]=pos[3]; pos[3]='0'; neighbours.append("".join(pos));
-      pos = temp; pos[6]=pos[7]; pos[7]='0'; neighbours.append("".join(pos));
+      pos[6]=pos[3]; pos[3]='0'; neighbors.append("".join(pos));
+      pos = copy(temp); pos[6]=pos[7]; pos[7]='0'; neighbors.append("".join(pos));
     elif empty==7:
-      pos[7]=pos[4]; pos[4]='0'; neighbours.append("".join(pos));
-      pos = temp; pos[7]=pos[6]; pos[6]='0'; neighbours.append("".join(pos));
-      pos = temp; pos[7]=pos[8]; pos[8]='0'; neighbours.append("".join(pos));
+      pos[7]=pos[4]; pos[4]='0'; neighbors.append("".join(pos));
+      pos = copy(temp); pos[7]=pos[6]; pos[6]='0'; neighbors.append("".join(pos));
+      pos = copy(temp); pos[7]=pos[8]; pos[8]='0'; neighbors.append("".join(pos));
     elif empty==8:
-      pos[8]=pos[5]; pos[5]='0'; neighbours.append("".join(pos));
-      pos = temp; pos[8]=pos[7]; pos[7]='0'; neighbours.append("".join(pos));
+      pos[8]=pos[5]; pos[5]='0'; neighbors.append("".join(pos));
+      pos = copy(temp); pos[8]=pos[7]; pos[7]='0'; neighbors.append("".join(pos));
     else:
       print 'FAIL! - Incorrect empty index at getNeighbourStates.'
     
+    return neighbors
   
   
   ##redefine hash and compare
