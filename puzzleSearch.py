@@ -4,6 +4,7 @@ import random
 import time
 
 
+##perform A* search on given 8-puzzle problem; implemented noise distortion
 def aStarSearch(start_state, heuristic, exact_part, noise_type, noise_magnitude):
     #in open list we put cells that we are going to look
     #in closed list we put tuple (x,y) coordinates of cells that we already looked
@@ -34,10 +35,44 @@ def aStarSearch(start_state, heuristic, exact_part, noise_type, noise_magnitude)
     print "Fail to find path"
 
 
+Infinity = float("inf")
+##preform IDA* search on given 8-puzzle problem
+def idaStarSearch(start_state, heuristic, exact_part, noise_type, noise_magnitude):
+  rootNode = start_state
+  costLimit = rootNode.getH()
+  c=0
+  while True:
+    (solution, costLimit,c) = DFS(0, rootNode, costLimit, [rootNode], heuristic, exact_part, noise_type, noise_magnitude,c)
+    if solution != None:
+      print 'count:',c
+      return (solution, costLimit)
+    if costLimit == Infinity:
+      return None
+
+##depth first search for IDA*
+def DFS(startCost, node, costLimit, currentPath, heuristic, exact_part, noise_type, noise_magnitude,c):
+  c+=1
+  minimumCost = startCost + node.getH()
+  if minimumCost > costLimit:
+    return (None, minimumCost,c)
+  if node.position == '123456780':
+    return (currentPath, costLimit,c)
+    
+  
+  nextCostLimit = Infinity
+  neighbors = getNeighborStates(node, heuristic, heuristic[currentPath[0].getPosition()], exact_part, noise_type, noise_magnitude)
+  for succNode in neighbors:
+    newStartCost = startCost + 1
+    (solution, newCostLimit,c) = DFS(newStartCost, succNode, costLimit, currentPath + [succNode], heuristic, exact_part, noise_type, noise_magnitude,c)
+    if solution != None:
+      return (solution, newCostLimit,c)
+    nextCostLimit = min(nextCostLimit, newCostLimit)
+  return (None,nextCostLimit,c)
+
+
 def getNeighborStates(start_position, heuristic, solution_length, exact_part, noise_type, noise_magnitude):
   neighbors=[]
   nexts = start_position.getNeighborPositions()
-  
   for next in nexts:
     noisy_h = distortHeuristic(heuristic[next], solution_length, exact_part, noise_type, noise_magnitude)
     neighbors.append(State(next,start_position,noisy_h))
@@ -116,7 +151,12 @@ def solutionPath(ending_position):
   
   return path
 
-## ida*
+
+def findPosition(solution_length,db):
+  for k,v in db.iteritems():
+    if v == solution_length: return k
+  return None
+
 
 
 start = time.clock()
@@ -129,3 +169,7 @@ print 'A* alg:', time.clock()-start
 
 print solutionsDistribution(h)
 
+p = findPosition(24,h)
+path,limit = idaStarSearch(State(p,None,24), h, 'end', 'gauss', 0.50)
+print limit
+print len(path)
