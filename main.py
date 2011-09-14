@@ -83,7 +83,7 @@ def main():
 
 def test():
     ##parameters for running tests
-    mapSize=[15,20,25]
+    mapSize=[20,25]
     mapBricksAmount=[20,40,60,80]
     heuristic_type=['optimistic_gauss', 'gauss']
     noise_amount=[20,40,60]
@@ -103,6 +103,9 @@ def test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iter
                     result_a_i,result_a_s,result_a_c,result_a_e = 0,0,0,0
                     result_ida_i,result_ida_s,result_ida_c,result_ida_e = 0,0,0,0
                     result_ida_ie,result_ida_se,result_ida_ce,result_ida_ee = 0,0,0,0
+                    
+                    f = file("results/brick_size%s_%sproc_%s_%sproc.txt"%(size,brickPercentage,heuristic,noise),"w")
+                    
                     for iteration in range(iterationNo):
     
                         #size in one demension and density in %
@@ -118,29 +121,49 @@ def test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iter
                         
                         logging.debug("Preforming A*")
                         testMap.aStarSearch(testMap.priceWorld)
+                        #result used for average
                         result_a_i = result_a_i + testMap.aStarCheckedNodes
+                        #result used for writting in file (for specific map)
+                        temp_a_i = testMap.aStarCheckedNodes
                         testMap.aStarSearch(start)
                         result_a_s = result_a_s + testMap.aStarCheckedNodes
+                        temp_a_s = testMap.aStarCheckedNodes
                         testMap.aStarSearch(center)
                         result_a_c = result_a_c + testMap.aStarCheckedNodes
+                        temp_a_c = testMap.aStarCheckedNodes
                         testMap.aStarSearch(end)
                         result_a_e = result_a_e + testMap.aStarCheckedNodes
+                        temp_a_e = testMap.aStarCheckedNodes
                         
                         logging.debug("Preforming IDA*")
                         testMap.idaStarSearch(testMap.priceWorld)
                         result_ida_i = result_ida_i + testMap.idaStarNodes
                         result_ida_ie = result_ida_ie + testMap.getIdaStarNodes()
+                        temp_ida_i = testMap.idaStarNodes
+                        temp_ida_ie = testMap.getIdaStarNodes()
                         testMap.idaStarSearch(start)
                         result_ida_s = result_ida_s + testMap.idaStarNodes
                         result_ida_se = result_ida_se + testMap.getIdaStarNodes()
+                        temp_ida_s = testMap.idaStarNodes
+                        temp_ida_se = testMap.getIdaStarNodes()
                         testMap.idaStarSearch(center)
                         result_ida_c = result_ida_c + testMap.idaStarNodes
                         result_ida_ce = result_ida_ce + testMap.getIdaStarNodes()
+                        temp_ida_c = testMap.idaStarNodes
+                        temp_ida_ce = testMap.getIdaStarNodes()
                         testMap.idaStarSearch(end)
                         result_ida_e = result_ida_e + testMap.idaStarNodes
                         result_ida_ee = result_ida_ee + testMap.getIdaStarNodes()
-                    
-                    f = file("results/brick_size%s_%sproc_%s_%sproc.txt"%(size,brickPercentage,heuristic,noise),"w")
+                        temp_ida_e = testMap.idaStarNodes
+                        temp_ida_ee = testMap.getIdaStarNodes()
+                        
+                        f.write("\t\t-------------"+str(iteration+1)+"-------------\n")
+                        f.write("ideal A*:"+str(temp_a_i)+"\t\tideal IDA*:"+str(temp_ida_i)+"\t\t(expand)ideal IDA*:"+str(temp_ida_ie)+"\n")
+                        f.write("start A*:"+str(temp_a_s)+"\t\tstart IDA*:"+str(temp_ida_s)+"\t\t(expand)start IDA*:"+str(temp_ida_se)+"\n")
+                        f.write("center A*:"+str(temp_a_c)+"\t\tcenter IDA*:"+str(temp_ida_c)+"\t\t(expand)center IDA*:"+str(temp_ida_ce)+"\n")
+                        f.write("end A*:"+str(temp_a_e)+"\t\tend IDA*:"+str(temp_ida_e)+"\t\t(expand)end IDA*:"+str(temp_ida_ee)+"\n")
+                        
+                    f.write("\n---------------------------Average result---------------------------\n")
                     f.write("ideal A*:"+str(float(result_a_i)/iterationNo)+"\t\tideal IDA*:"+str(float(result_ida_i)/iterationNo)+"\t\t(expand)ideal IDA*:"+str(float(result_ida_ie)/iterationNo)+"\n")
                     f.write("start A*:"+str(float(result_a_s)/iterationNo)+"\t\tstart IDA*:"+str(float(result_ida_s)/iterationNo)+"\t\t(expand)start IDA*:"+str(float(result_ida_se)/iterationNo)+"\n")
                     f.write("center A*:"+str(float(result_a_c)/iterationNo)+"\t\tcenter IDA*:"+str(float(result_ida_c)/iterationNo)+"\t\t(expand)center IDA*:"+str(float(result_ida_ce)/iterationNo)+"\n")

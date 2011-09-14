@@ -162,8 +162,11 @@ class brickWorld():
     costLimit = rootNode.getH()
     self.idaStarSet.clear()
     self.idaStarNodes = 0
+    it = 0
     while True:
       (solution, costLimit) = self.DFS(0, rootNode, costLimit, [rootNode],heuristic)
+      it = it + 1
+      logging.info("Iteration:"+str(it))
       if solution != None:
         return (solution, costLimit)
       if costLimit == Infinity:

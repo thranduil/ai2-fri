@@ -1,4 +1,0 @@
-ideal A*:12.8		ideal IDA*:22.7		(expand)ideal IDA*:20.4
-start A*:13.3		start IDA*:25.1		(expand)start IDA*:20.8
-center A*:17.0		center IDA*:76.8		(expand)center IDA*:30.4
-end A*:17.4		end IDA*:134.0		(expand)end IDA*:33.4
