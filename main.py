@@ -141,16 +141,19 @@ def test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iter
                         result_ida_ie = result_ida_ie + testMap.getIdaStarNodes()
                         temp_ida_i = testMap.idaStarNodes
                         temp_ida_ie = testMap.getIdaStarNodes()
+                        logging.debug("Preforming IDA* (start)")
                         testMap.idaStarSearch(start)
                         result_ida_s = result_ida_s + testMap.idaStarNodes
                         result_ida_se = result_ida_se + testMap.getIdaStarNodes()
                         temp_ida_s = testMap.idaStarNodes
                         temp_ida_se = testMap.getIdaStarNodes()
+                        logging.debug("Preforming IDA* (center)")
                         testMap.idaStarSearch(center)
                         result_ida_c = result_ida_c + testMap.idaStarNodes
                         result_ida_ce = result_ida_ce + testMap.getIdaStarNodes()
                         temp_ida_c = testMap.idaStarNodes
                         temp_ida_ce = testMap.getIdaStarNodes()
+                        logging.debug("Preforming IDA* (end)")
                         testMap.idaStarSearch(end)
                         result_ida_e = result_ida_e + testMap.idaStarNodes
                         result_ida_ee = result_ida_ee + testMap.getIdaStarNodes()
