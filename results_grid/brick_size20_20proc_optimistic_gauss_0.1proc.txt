@@ -1,0 +1,11 @@
+		-------------1-------------
+ideal A*:22		ideal IDA*:60
+start A*:23/1		start IDA*:63/1
+center A*:38/1		center IDA*:500/1
+end A*:34/1		end IDA*:519/1
+
+---------------------------Average result---------------------------
+ideal A*:22.0		ideal IDA*:60.0
+start A*:23.0/1.0		start IDA*:63.0/1.0
+center A*:38.0/1.0		center IDA*:500.0/1.0
+end A*:34.0/1.0		end IDA*:519.0/1.0

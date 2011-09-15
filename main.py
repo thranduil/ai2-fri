@@ -7,9 +7,9 @@ logging.basicConfig(format=FORMAT, datefmt='%H:%M:%S', level=logging.DEBUG)
 
 def test():
     ##parameters for running tests
-    mapSize=[20,25]
+    mapSize=[20]
     mapBricksAmount=[20,40,60,80]
-    heuristic_type=['optimistic_gauss', 'gauss']
+    heuristic_type=['optimistic_gauss', 'gauss', 'pessimistic_gauss']
     noise_amount=[0.1,0.2,0.4]
     iterationNo = 1
     
@@ -28,74 +28,77 @@ def test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iter
                 for noise in noise_amount:
                     result_a_i,result_a_s,result_a_c,result_a_e = 0,0,0,0
                     result_ida_i,result_ida_s,result_ida_c,result_ida_e = 0,0,0,0
+                    delta_optimal_a_s, delta_optimal_a_c, delta_optimal_a_e = 0,0,0
+                    delta_optimal_ida_s, delta_optimal_ida_c, delta_optimal_ida_e = 0,0,0
                     
-                    f = file("results/brick_size%s_%sproc_%s_%sproc.txt"%(size,brickPercentage,heuristic,noise),"w")
+                    f = file("results_grid/brick_size%s_%sproc_%s_%sproc.txt"%(size,brickPercentage,heuristic,noise),"w")
                     
                     for iteration in range(iterationNo):
     
                         #size in one dimension and density in %
                         testMap = bricksWorld.brickWorld(size,brickPercentage)
-
+                        
+                        idealPathLength = testMap.getIdealPathLength()
                         start = testMap.distortHeuristic('start', heuristic, noise, 0)
                         center = testMap.distortHeuristic('middle', heuristic, noise, 0)
                         end = testMap.distortHeuristic('end', heuristic, noise, 0)
-                        
-                        print testMap.getCell(testMap.priceWorld,testMap.startPoint[0],testMap.startPoint[1])
-                        testMap.printPriceWorld(testMap.priceWorld)
-                        print ""
-                        testMap.compareHeuristics(testMap.priceWorld)
-                        print ""
-                        testMap.compareHeuristics(start)
-                        print ""
-                        testMap.compareHeuristics(center)
-                        print ""
-                        testMap.compareHeuristics(end)
-                        print ""
-                        
+                              
                         logging.debug("Performing A*")
                         testMap.aStarSearch(testMap.priceWorld)
                         #result used for average
                         result_a_i = result_a_i + testMap.aStarCheckedNodes
                         #result used for writing in file (for specific map)
                         temp_a_i = testMap.aStarCheckedNodes
-                        testMap.aStarSearch(start)
+                        
+                        pl1 = testMap.aStarSearch(start)
                         result_a_s = result_a_s + testMap.aStarCheckedNodes
                         temp_a_s = testMap.aStarCheckedNodes
-                        testMap.aStarSearch(center)
+                        delta_optimal_a_s = delta_optimal_a_s + (pl1 - idealPathLength)
+                        
+                        pl2 = testMap.aStarSearch(center)
                         result_a_c = result_a_c + testMap.aStarCheckedNodes
                         temp_a_c = testMap.aStarCheckedNodes
-                        testMap.aStarSearch(end)
+                        delta_optimal_a_c = delta_optimal_a_c + (pl2 - idealPathLength)
+                        
+                        pl3 = testMap.aStarSearch(end)
                         result_a_e = result_a_e + testMap.aStarCheckedNodes
                         temp_a_e = testMap.aStarCheckedNodes
+                        delta_optimal_a_e = delta_optimal_a_e + (pl3 - idealPathLength)
                         
                         logging.debug("Performing IDA*")
                         testMap.idaStarSearch(testMap.priceWorld)
                         result_ida_i = result_ida_i + testMap.idaStarNodes
                         temp_ida_i = testMap.idaStarNodes
+                        
                         logging.debug("Performing IDA* (start)")
-                        testMap.idaStarSearch(start)
+                        pl4 = testMap.idaStarSearch(start)
                         result_ida_s = result_ida_s + testMap.idaStarNodes
                         temp_ida_s = testMap.idaStarNodes
+                        delta_optimal_ida_s = delta_optimal_ida_s + (pl4 - idealPathLength)
+                        
                         logging.debug("Performing IDA* (center)")
-                        testMap.idaStarSearch(center)
+                        pl5 = testMap.idaStarSearch(center)
                         result_ida_c = result_ida_c + testMap.idaStarNodes
                         temp_ida_c = testMap.idaStarNodes
+                        delta_optimal_ida_c = delta_optimal_ida_c + (pl5 - idealPathLength)
+                        
                         logging.debug("Performing IDA* (end)")
-                        testMap.idaStarSearch(end)
+                        pl6 = testMap.idaStarSearch(end)
                         result_ida_e = result_ida_e + testMap.idaStarNodes
                         temp_ida_e = testMap.idaStarNodes
+                        delta_optimal_ida_e = delta_optimal_ida_e + (pl6 - idealPathLength)
                         
                         f.write("\t\t-------------"+str(iteration+1)+"-------------\n")
                         f.write("ideal A*:"+str(temp_a_i)+"\t\tideal IDA*:"+str(temp_ida_i)+"\n")
-                        f.write("start A*:"+str(temp_a_s)+"\t\tstart IDA*:"+str(temp_ida_s)+"\n")
-                        f.write("center A*:"+str(temp_a_c)+"\t\tcenter IDA*:"+str(temp_ida_c)+"\n")
-                        f.write("end A*:"+str(temp_a_e)+"\t\tend IDA*:"+str(temp_ida_e)+"\n")
+                        f.write("start A*:"+str(temp_a_s)+"/"+str(pl1 - idealPathLength)+"\t\tstart IDA*:"+str(temp_ida_s)+"/"+str(pl4 - idealPathLength)+"\n")
+                        f.write("center A*:"+str(temp_a_c)+"/"+str(pl2 - idealPathLength)+"\t\tcenter IDA*:"+str(temp_ida_c)+"/"+str(pl5 - idealPathLength)+"\n")
+                        f.write("end A*:"+str(temp_a_e)+"/"+str(pl3 - idealPathLength)+"\t\tend IDA*:"+str(temp_ida_e)+"/"+str(pl6 - idealPathLength)+"\n")
                         
                     f.write("\n---------------------------Average result---------------------------\n")
                     f.write("ideal A*:"+str(float(result_a_i)/iterationNo)+"\t\tideal IDA*:"+str(float(result_ida_i)/iterationNo)+"\n")
-                    f.write("start A*:"+str(float(result_a_s)/iterationNo)+"\t\tstart IDA*:"+str(float(result_ida_s)/iterationNo)+"\n")
-                    f.write("center A*:"+str(float(result_a_c)/iterationNo)+"\t\tcenter IDA*:"+str(float(result_ida_c)/iterationNo)+"\n")
-                    f.write("end A*:"+str(float(result_a_e)/iterationNo)+"\t\tend IDA*:"+str(float(result_ida_e)/iterationNo)+"\n")
+                    f.write("start A*:"+str(float(result_a_s)/iterationNo)+"/"+str(float(delta_optimal_a_s)/iterationNo)+"\t\tstart IDA*:"+str(float(result_ida_s)/iterationNo)+"/"+str(float(delta_optimal_ida_s)/iterationNo)+"\n")
+                    f.write("center A*:"+str(float(result_a_c)/iterationNo)+"/"+str(float(delta_optimal_a_c)/iterationNo)+"\t\tcenter IDA*:"+str(float(result_ida_c)/iterationNo)+"/"+str(float(delta_optimal_ida_c)/iterationNo)+"\n")
+                    f.write("end A*:"+str(float(result_a_e)/iterationNo)+"/"+str(float(delta_optimal_a_e)/iterationNo)+"\t\tend IDA*:"+str(float(result_ida_e)/iterationNo)+"/"+str(float(delta_optimal_ida_e)/iterationNo)+"\n")
                     f.close()
                     logging.info("Write completed: brick_size%s_%sproc_%s_%sproc.txt"%(size,brickPercentage,heuristic,noise))
 

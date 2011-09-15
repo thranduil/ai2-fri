@@ -153,7 +153,8 @@ class brickWorld():
       if current.getXY() == self.finishPoint:
         self.aStarCheckedNodes = len(closedList)
         self.aStarOpenNodes = len(openList)
-        return
+        return self.getAStarPathLength(current)
+        
       openList.remove(current)
       closedList.add(current.getXY())
       neighbors = self.getNeighborCell(current, heuristic)
@@ -161,6 +162,7 @@ class brickWorld():
         if n.getXY() not in closedList:
           openList.add(n)
     print "Fail to find path"
+    return -1
   
   
   ##perform IDA* search on given map from start to finish point
@@ -172,11 +174,13 @@ class brickWorld():
     it = 0
     while True:
       it+=1
-      (solution, costLimit) = self.DFS(0, rootNode, costLimit, [rootNode],heuristic)
       logging.debug("Iteration:"+str(it))
+      (solution, costLimit) = self.DFS(0, rootNode, costLimit, [rootNode],heuristic)
       if solution != None:
-        return (solution, costLimit)
+        return len(solution)
+        #return (solution, costLimit)
       if costLimit == Infinity:
+        logging.error("Path with IDA* was not found!")
         return None
   
   
@@ -213,11 +217,25 @@ class brickWorld():
     return cells
   
   
-  ##recursively print path from finish to start point
-  def printPath(self,currentCell):
+  ##recursively print path from finish to start point for A* algorithm
+  def printAStarPath(self,currentCell):
     while currentCell != None:
       print currentCell
       currentCell = currentCell.parent
+  
+  
+  ##returns lengt of solution (path) for A* algorithm
+  def getAStarPathLength(self,currentCell):
+    l = 0
+    while currentCell != None:
+      l+=1
+      currentCell = currentCell.parent
+    return l
+  
+  
+  ##returns length of ideal path from start to end
+  def getIdealPathLength(self):
+    return self.getCell(self.priceWorld,self.startPoint[0], self.startPoint[1])
   
   
   ##returns distorted heuristic
