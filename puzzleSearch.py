@@ -186,7 +186,7 @@ def testing(sol_lens, noise_types, noise_mags, repeats):
       for nm in noise_mags:
         test_counter+=1
         print 'testing...',test_counter
-        f = file("results_puzzle/sol_len%i_%s_noise%i_%iproc.txt"%(sl,nt,int(nm[0]*100),int(nm[1])*100),"w")
+        f = file("results_puzzle/sol_len%i_%s_noise%i_%iproc.txt"%(sl,nt,int(nm[0]*100),int(nm[1]*100)),"w")
         for part in ['start', 'middle', 'end']:
           a_nodes = []
           a_diff = []
