@@ -227,11 +227,7 @@ def testing(sol_lens, noise_types, noise_mags, repeats):
 #test 3 noises: 10%,20%,30% with 1 part ideal
 #test 3 noises: 20%,30%,40% with 1 part 10% noise
 #100 iterations for each test
-solution_lengths = [15,20,25]
-noise_types = ['optimistic_gauss','pessimistic_gauss','gauss']
-noise_magnitudes = [[0.1,0],[0.2,0],[0.3,0],[0.2,0.1],[0.3,0.1],[0.4,0.1]]
-iterations = 1
-testing(solution_lengths, noise_types, noise_magnitudes, iterations)
+
 
 #start = time.clock()
 #h = exactHeuristic()
@@ -251,3 +247,13 @@ testing(solution_lengths, noise_types, noise_magnitudes, iterations)
 #path,limit = idaStarSearch(State(p[0],None,24), distorted)
 #print limit
 #print len(path)
+
+def test():
+  solution_lengths = [15,20,25]
+  noise_types = ['optimistic_gauss','pessimistic_gauss','gauss']
+  noise_magnitudes = [[0.1,0],[0.2,0],[0.3,0],[0.2,0.1],[0.3,0.1],[0.4,0.1]]
+  iterations = 1
+  testing(solution_lengths, noise_types, noise_magnitudes, iterations)
+  
+if __name__ == "__main__":test()
+
