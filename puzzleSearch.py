@@ -1,11 +1,12 @@
 from tile import Position
 from puzzleState import State
+from copy import copy
 import random
 import time
 
 
 ##perform A* search on given 8-puzzle problem; implemented noise distortion
-def aStarSearch(start_state, heuristic, exact_part, noise_type, noise_magnitude):
+def aStarSearch(start_state, heuristic):
     #in open list we put cells that we are going to look
     #in closed list we put tuple (x,y) coordinates of cells that we already looked
     openList = set()
@@ -28,7 +29,7 @@ def aStarSearch(start_state, heuristic, exact_part, noise_type, noise_magnitude)
         return
       openList.remove(current)
       closedList.add(current)
-      neighbors = getNeighborStates(current,heuristic, start_state.getH(), exact_part, noise_type, noise_magnitude)
+      neighbors = getNeighborStates(current,heuristic)
       for n in neighbors:
         if n not in closedList:
           openList.add(n)
@@ -37,12 +38,12 @@ def aStarSearch(start_state, heuristic, exact_part, noise_type, noise_magnitude)
 
 Infinity = float("inf")
 ##preform IDA* search on given 8-puzzle problem
-def idaStarSearch(start_state, heuristic, exact_part, noise_type, noise_magnitude):
+def idaStarSearch(start_state, heuristic):
   rootNode = start_state
   costLimit = rootNode.getH()
   c=0
   while True:
-    (solution, costLimit,c) = DFS(0, rootNode, costLimit, [rootNode], heuristic, exact_part, noise_type, noise_magnitude,c)
+    (solution, costLimit,c) = DFS(0, rootNode, costLimit, [rootNode], heuristic,c)
     if solution != None:
       print 'count:',c
       return (solution, costLimit)
@@ -50,7 +51,7 @@ def idaStarSearch(start_state, heuristic, exact_part, noise_type, noise_magnitud
       return None
 
 ##depth first search for IDA*
-def DFS(startCost, node, costLimit, currentPath, heuristic, exact_part, noise_type, noise_magnitude,c):
+def DFS(startCost, node, costLimit, currentPath, heuristic,c):
   c+=1
   minimumCost = startCost + node.getH()
   if minimumCost > costLimit:
@@ -60,39 +61,45 @@ def DFS(startCost, node, costLimit, currentPath, heuristic, exact_part, noise_ty
     
   
   nextCostLimit = Infinity
-  neighbors = getNeighborStates(node, heuristic, heuristic[currentPath[0].getPosition()], exact_part, noise_type, noise_magnitude)
+  neighbors = getNeighborStates(node, heuristic)
   for succNode in neighbors:
     newStartCost = startCost + 1
-    (solution, newCostLimit,c) = DFS(newStartCost, succNode, costLimit, currentPath + [succNode], heuristic, exact_part, noise_type, noise_magnitude,c)
+    (solution, newCostLimit,c) = DFS(newStartCost, succNode, costLimit, currentPath+[succNode], heuristic, c)
     if solution != None:
       return (solution, newCostLimit,c)
     nextCostLimit = min(nextCostLimit, newCostLimit)
   return (None,nextCostLimit,c)
 
 
-def getNeighborStates(start_position, heuristic, solution_length, exact_part, noise_type, noise_magnitude):
+def getNeighborStates(start_position, heuristic):
   neighbors=[]
   nexts = start_position.getNeighborPositions()
   for next in nexts:
-    noisy_h = distortHeuristic(heuristic[next], solution_length, exact_part, noise_type, noise_magnitude)
-    neighbors.append(State(next,start_position,noisy_h))
+    neighbors.append(State(next,start_position,heuristic[next]))
   return neighbors
 
 
-def distortHeuristic(h, solution_length, exact_part, noise_type, noise_magnitude):
-  new_h = h
+def distortHeuristic(h, solution_length, better_part, noise_type, noise_magnitude, better_noise):
+  new_h = copy(h)
   
-  if exact_part == 'start':
-    if h > round(solution_length/3):
-      new_h = calculateNoise(h, noise_type, noise_magnitude)
-      
-  elif exact_part == 'middle':
-    if h < round(solution_length/3) or h > round(2*solution_length/3):
-      new_h = calculateNoise(h, noise_type, noise_magnitude)
-      
-  elif exact_part == 'end':
-    if h < round(2*solution_length/3):
-      new_h = calculateNoise(h, noise_type, noise_magnitude)
+  for k,v in new_h.iteritems():
+    if better_part == 'start':
+      if v > round(solution_length/3):
+        new_h[k] = calculateNoise(v, noise_type, noise_magnitude)
+      elif better_noise > 0:
+        new_h[k] = calculateNoise(v, noise_type, better_noise)
+        
+    elif better_part == 'middle':
+      if v < round(solution_length/3) or v > round(2*solution_length/3):
+        new_h[k] = calculateNoise(v, noise_type, noise_magnitude)
+      elif better_noise > 0:
+        new_h[k] = calculateNoise(v, noise_type, better_noise)
+        
+    elif better_part == 'end':
+      if v < round(2*solution_length/3):
+        new_h[k] = calculateNoise(v, noise_type, noise_magnitude)
+      elif better_noise > 0:
+        new_h[k] = calculateNoise(v, noise_type, better_noise)
       
   return new_h
 
@@ -102,11 +109,18 @@ def calculateNoise(h, noise_type, noise_magnitude):
   
   if noise_type == 'gauss':
     x = int(round(random.gauss(h,float(h)*noise_magnitude)))
+    if x<0 : x=0
     
   elif noise_type == 'optimistic_gauss':
-    x=h+1
-    while x > h:
-      x = int(round(random.gauss(h,float(h)*noise_magnitude)))
+    x = int(round(random.gauss(h,float(h)*noise_magnitude)))
+    if x > h:
+      x = h-(x-h)
+    if x<0 : x=0
+      
+  elif noise_type == 'pessimistic_gauss':
+    x = int(round(random.gauss(h,float(h)*noise_magnitude)))
+    if x < h:
+      x = h+(h-x)
   
   return x
 
@@ -152,10 +166,48 @@ def solutionPath(ending_position):
   return path
 
 
-def findPosition(solution_length,db):
+def findPositions(solution_length,db):
+  results = []
   for k,v in db.iteritems():
-    if v == solution_length: return k
-  return None
+    if v == solution_length: results.append(k)
+  return results
+
+
+def testing(sol_lens, noise_types, noise_mags, repeats):
+  #test 3 sizes (15,20,25) - solution length
+  #test 3 types of noises: optimistic, pessimistic and normal gauss
+  # --- with pessimistic and normal gauss calculate and compare also difference to optimal solution
+  #test 3 noises: 10%,20%,30% with 1 part ideal
+  #test 3 noises: 20%,30%,40% with 1 part 10% noise
+  #100 iterations for each test
+  
+  eH = exactHeuristic()
+  
+  for sl in sol_lens:
+    positions = findPositions(sl,eH)
+    random.shuffle(positions)
+    # calculate ideal
+    for nt in noise_types:
+      for nm in noise_mags:
+        f = file("results_puzzle/sol_len%i_%s_noise%i_%i.txt"%(sl,nt,nm[0],nm[1]),"w")
+        for part in ['start', 'middle', 'end']:
+          astar_nodes = []
+          astar_sol_diff = []
+          idastar_nodes = []
+          idaStar_sol_diff = []
+          f.write('\n------'+part+':------\n')
+          f.write('explored_nodes: ')
+          for r in range(repeats):
+            distorted = distortHeuristic(eH, sl, part, nt, nm[0], nm[1])
+            print 'A* test'
+            path,count_a = aStarSearch(State(positions[r],None,sl), distorted)
+            astar_nodes.append(count_a)
+            astar_sol_diff.append(len(path)-sl)
+            print 'IDA* test'
+            path,limit,count_ida = idaStarSearch(State(positions[r],None,sl), distorted)
+            #save to file
+            f.write()
+            
 
 
 
@@ -164,12 +216,16 @@ h = exactHeuristic()
 print 'nalaganje hevristike:', time.clock()-start
 print '---'
 start = time.clock()
-aStarSearch(State('012345678',None,22), h, 'start', 'no_noise', 0.20)
+aStarSearch(State('012345678',None,22), h)
 print 'A* alg:', time.clock()-start
 
 print solutionsDistribution(h)
 
-p = findPosition(24,h)
-path,limit = idaStarSearch(State(p,None,24), h, 'end', 'gauss', 0.50)
+start = time.clock()
+distorted = distortHeuristic(h, 24, 'middle', 'gauss', 0.2, 0.0)
+print 'distortion time:', time.clock()-start
+
+p = findPositions(24,h)
+path,limit = idaStarSearch(State(p[0],None,24), distorted)
 print limit
 print len(path)
