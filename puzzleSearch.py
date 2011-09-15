@@ -19,14 +19,9 @@ def aStarSearch(start_state, heuristic):
       current = sorted(temp, key = lambda State:State.getF())[0]
 
       if current.getPosition() == '123456780':
-        print "A* closed list:", len(closedList)
-        print "open list:", len(openList)
-        print "sum:", len(closedList)+len(openList)
-        #self.aStarCheckedNodes = len(closedList)
-        #self.aStarOpenNodes = len(openList)
-        #self.printPath(current)
-        print solutionPath(current)
-        return
+        count = len(closedList)+1
+        path = solutionPath(current)[1]
+        return path, count
       openList.remove(current)
       closedList.add(current)
       neighbors = getNeighborStates(current,heuristic)
@@ -36,22 +31,24 @@ def aStarSearch(start_state, heuristic):
     print "Fail to find path"
 
 
-Infinity = float("inf")
+
 ##preform IDA* search on given 8-puzzle problem
 def idaStarSearch(start_state, heuristic):
+  Infinity = float("inf")
   rootNode = start_state
   costLimit = rootNode.getH()
   c=0
   while True:
     (solution, costLimit,c) = DFS(0, rootNode, costLimit, [rootNode], heuristic,c)
     if solution != None:
-      print 'count:',c
-      return (solution, costLimit)
+      return (solution, costLimit, c)
     if costLimit == Infinity:
+      print 'IDA* fail!!'
       return None
 
 ##depth first search for IDA*
 def DFS(startCost, node, costLimit, currentPath, heuristic,c):
+  Infinity = float("inf")
   c+=1
   minimumCost = startCost + node.getH()
   if minimumCost > costLimit:
@@ -174,58 +171,83 @@ def findPositions(solution_length,db):
 
 
 def testing(sol_lens, noise_types, noise_mags, repeats):
-  #test 3 sizes (15,20,25) - solution length
-  #test 3 types of noises: optimistic, pessimistic and normal gauss
-  # --- with pessimistic and normal gauss calculate and compare also difference to optimal solution
-  #test 3 noises: 10%,20%,30% with 1 part ideal
-  #test 3 noises: 20%,30%,40% with 1 part 10% noise
-  #100 iterations for each test
+  #sol_lens = list of solution lengths
+  #noise_types = list of noise types
+  #noise_mags = list of 2 el lists with noise magnitudes; 2nd el for noise of better part
+  #repeats = number of iterations for each test
   
   eH = exactHeuristic()
-  
+  test_counter = 0
   for sl in sol_lens:
     positions = findPositions(sl,eH)
     random.shuffle(positions)
     # calculate ideal
     for nt in noise_types:
       for nm in noise_mags:
-        f = file("results_puzzle/sol_len%i_%s_noise%i_%i.txt"%(sl,nt,nm[0],nm[1]),"w")
+        test_counter+=1
+        print 'testing...',test_counter
+        f = file("results_puzzle/sol_len%i_%s_noise%i_%iproc.txt"%(sl,nt,int(nm[0]*100),int(nm[1])*100),"w")
         for part in ['start', 'middle', 'end']:
-          astar_nodes = []
-          astar_sol_diff = []
-          idastar_nodes = []
-          idaStar_sol_diff = []
+          a_nodes = []
+          a_diff = []
+          ida_nodes = []
+          ida_diff = []
           f.write('\n------'+part+':------\n')
-          f.write('explored_nodes: ')
           for r in range(repeats):
             distorted = distortHeuristic(eH, sl, part, nt, nm[0], nm[1])
-            print 'A* test'
-            path,count_a = aStarSearch(State(positions[r],None,sl), distorted)
-            astar_nodes.append(count_a)
-            astar_sol_diff.append(len(path)-sl)
-            print 'IDA* test'
-            path,limit,count_ida = idaStarSearch(State(positions[r],None,sl), distorted)
-            #save to file
-            f.write()
+            #print 'A* test'
+            path,count = aStarSearch(State(positions[r],None,sl), distorted)
+            a_nodes.append(count)
+            a_diff.append(len(path)-sl)
+            #print 'IDA* test'
+            path,limit,count = idaStarSearch(State(positions[r],None,sl), distorted)
+            ida_nodes.append(count)
+            ida_diff.append(len(path)-sl)
             
+          f.write('A*\n explored_nodes: ')
+          for n in a_nodes:
+            f.write(str(n)+', ')
+          f.write('\n suboptimal_solution: ')
+          for n in a_diff:
+            f.write(str(n)+', ')
+          f.write('IDA*\n explored_nodes: ')
+          for n in ida_nodes:
+            f.write(str(n)+', ')
+          f.write('\n suboptimal_solution: ')
+          for n in ida_diff:
+            f.write(str(n)+', ')
+          f.write('\n')
+        f.close()
 
 
 
-start = time.clock()
-h = exactHeuristic()
-print 'nalaganje hevristike:', time.clock()-start
-print '---'
-start = time.clock()
-aStarSearch(State('012345678',None,22), h)
-print 'A* alg:', time.clock()-start
+#test 3 sizes (15,20,25) - solution length
+#test 3 types of noises: optimistic, pessimistic and normal gauss
+# --- with pessimistic and normal gauss calculate and compare also difference to optimal solution
+#test 3 noises: 10%,20%,30% with 1 part ideal
+#test 3 noises: 20%,30%,40% with 1 part 10% noise
+#100 iterations for each test
+solution_lengths = [15,20,25]
+noise_types = ['optimistic_gauss','pessimistic_gauss','gauss']
+noise_magnitudes = [[0.1,0],[0.2,0],[0.3,0],[0.2,0.1],[0.3,0.1],[0.4,0.1]]
+iterations = 1
+testing(solution_lengths, noise_types, noise_magnitudes, iterations)
 
-print solutionsDistribution(h)
+#start = time.clock()
+#h = exactHeuristic()
+#print 'nalaganje hevristike:', time.clock()-start
 
-start = time.clock()
-distorted = distortHeuristic(h, 24, 'middle', 'gauss', 0.2, 0.0)
-print 'distortion time:', time.clock()-start
+#start = time.clock()
+#aStarSearch(State('012345678',None,22), h)
+#print 'A* alg:', time.clock()-start
 
-p = findPositions(24,h)
-path,limit = idaStarSearch(State(p[0],None,24), distorted)
-print limit
-print len(path)
+#print solutionsDistribution(h)
+
+#start = time.clock()
+#distorted = distortHeuristic(h, 24, 'middle', 'gauss', 0.2, 0.0)
+#print 'distortion time:', time.clock()-start
+
+#p = findPositions(24,h)
+#path,limit = idaStarSearch(State(p[0],None,24), distorted)
+#print limit
+#print len(path)
