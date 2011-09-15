@@ -1,21 +1,21 @@
 
 ------start:------
 A*
- explored_nodes: 234, 
- suboptimal_solution: 3, IDA*
- explored_nodes: 20318, 
+ explored_nodes: 26, 
+ suboptimal_solution: 1, IDA*
+ explored_nodes: 109, 
  suboptimal_solution: 1, 
 
 ------middle:------
 A*
- explored_nodes: 81, 
+ explored_nodes: 26, 
  suboptimal_solution: 1, IDA*
- explored_nodes: 129009, 
+ explored_nodes: 105, 
  suboptimal_solution: 1, 
 
 ------end:------
 A*
- explored_nodes: 43, 
+ explored_nodes: 24, 
  suboptimal_solution: 1, IDA*
- explored_nodes: 739, 
+ explored_nodes: 70, 
  suboptimal_solution: 1, 
