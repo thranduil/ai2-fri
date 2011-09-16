@@ -1,0 +1,506 @@
+		-------------1-------------
+ideal A*:22		ideal IDA*:42
+start A*:29/0		start IDA*:658/2
+center A*:32/4		center IDA*:523/6
+end A*:28/0		end IDA*:152/6
+		-------------2-------------
+ideal A*:24		ideal IDA*:54
+start A*:34/0		start IDA*:1462/2
+center A*:29/0		center IDA*:538/0
+end A*:37/0		end IDA*:547/4
+		-------------3-------------
+ideal A*:22		ideal IDA*:50
+start A*:23/0		start IDA*:52/0
+center A*:28/0		center IDA*:360/6
+end A*:31/0		end IDA*:505/4
+		-------------4-------------
+ideal A*:34		ideal IDA*:69
+start A*:34/0		start IDA*:555/2
+center A*:41/0		center IDA*:2719/6
+end A*:36/0		end IDA*:398/4
+		-------------5-------------
+ideal A*:22		ideal IDA*:48
+start A*:36/0		start IDA*:10626/4
+center A*:28/0		center IDA*:471/4
+end A*:31/0		end IDA*:930/2
+		-------------6-------------
+ideal A*:22		ideal IDA*:49
+start A*:23/0		start IDA*:373/2
+center A*:26/0		center IDA*:89/0
+end A*:32/0		end IDA*:390/2
+		-------------7-------------
+ideal A*:26		ideal IDA*:57
+start A*:27/0		start IDA*:500/2
+center A*:36/0		center IDA*:568/4
+end A*:29/0		end IDA*:94/2
+		-------------8-------------
+ideal A*:24		ideal IDA*:51
+start A*:32/0		start IDA*:1753/2
+center A*:30/0		center IDA*:2620/4
+end A*:26/0		end IDA*:72/2
+		-------------9-------------
+ideal A*:24		ideal IDA*:51
+start A*:36/0		start IDA*:9180/4
+center A*:39/0		center IDA*:16536/6
+end A*:40/0		end IDA*:12640/4
+		-------------10-------------
+ideal A*:22		ideal IDA*:44
+start A*:22/0		start IDA*:209/2
+center A*:24/0		center IDA*:137/4
+end A*:24/0		end IDA*:83/6
+		-------------11-------------
+ideal A*:22		ideal IDA*:47
+start A*:29/0		start IDA*:1969/4
+center A*:23/0		center IDA*:87/2
+end A*:27/0		end IDA*:109/4
+		-------------12-------------
+ideal A*:24		ideal IDA*:47
+start A*:33/0		start IDA*:579/2
+center A*:28/0		center IDA*:91/4
+end A*:27/0		end IDA*:125/6
+		-------------13-------------
+ideal A*:28		ideal IDA*:61
+start A*:30/0		start IDA*:184/0
+center A*:36/2		center IDA*:117/2
+end A*:45/2		end IDA*:10674/6
+		-------------14-------------
+ideal A*:22		ideal IDA*:48
+start A*:23/0		start IDA*:263/2
+center A*:28/0		center IDA*:78/0
+end A*:30/0		end IDA*:1847/6
+		-------------15-------------
+ideal A*:22		ideal IDA*:50
+start A*:26/0		start IDA*:1088/2
+center A*:29/0		center IDA*:544/2
+end A*:32/0		end IDA*:5556/6
+		-------------16-------------
+ideal A*:22		ideal IDA*:48
+start A*:31/0		start IDA*:8228/4
+center A*:27/0		center IDA*:282/4
+end A*:27/0		end IDA*:575/2
+		-------------17-------------
+ideal A*:22		ideal IDA*:45
+start A*:24/0		start IDA*:648/2
+center A*:24/0		center IDA*:109/4
+end A*:25/0		end IDA*:882/2
+		-------------18-------------
+ideal A*:28		ideal IDA*:61
+start A*:34/0		start IDA*:929/2
+center A*:39/2		center IDA*:1768/2
+end A*:40/2		end IDA*:3973/4
+		-------------19-------------
+ideal A*:24		ideal IDA*:49
+start A*:27/0		start IDA*:341/2
+center A*:31/0		center IDA*:941/6
+end A*:30/0		end IDA*:304/2
+		-------------20-------------
+ideal A*:22		ideal IDA*:51
+start A*:25/0		start IDA*:100/0
+center A*:29/0		center IDA*:387/6
+end A*:23/0		end IDA*:455/2
+		-------------21-------------
+ideal A*:24		ideal IDA*:53
+start A*:37/0		start IDA*:2467/2
+center A*:29/0		center IDA*:282/2
+end A*:30/0		end IDA*:255/2
+		-------------22-------------
+ideal A*:22		ideal IDA*:47
+start A*:23/0		start IDA*:202/2
+center A*:23/0		center IDA*:301/2
+end A*:23/0		end IDA*:80/4
+		-------------23-------------
+ideal A*:22		ideal IDA*:44
+start A*:23/0		start IDA*:141/0
+center A*:24/0		center IDA*:206/2
+end A*:25/0		end IDA*:463/2
+		-------------24-------------
+ideal A*:22		ideal IDA*:51
+start A*:31/0		start IDA*:429/0
+center A*:36/0		center IDA*:4804/6
+end A*:29/2		end IDA*:741/4
+		-------------25-------------
+ideal A*:24		ideal IDA*:56
+start A*:38/0		start IDA*:86061/6
+center A*:31/2		center IDA*:2010/6
+end A*:32/0		end IDA*:2056/2
+		-------------26-------------
+ideal A*:22		ideal IDA*:46
+start A*:23/0		start IDA*:94/0
+center A*:25/0		center IDA*:424/2
+end A*:24/0		end IDA*:290/2
+		-------------27-------------
+ideal A*:26		ideal IDA*:58
+start A*:40/0		start IDA*:8578/2
+center A*:36/0		center IDA*:358/2
+end A*:42/0		end IDA*:165491/6
+		-------------28-------------
+ideal A*:24		ideal IDA*:52
+start A*:30/0		start IDA*:888/2
+center A*:26/0		center IDA*:91/2
+end A*:30/0		end IDA*:210/4
+		-------------29-------------
+ideal A*:22		ideal IDA*:51
+start A*:22/0		start IDA*:93/0
+center A*:28/2		center IDA*:139/2
+end A*:32/0		end IDA*:808/4
+		-------------30-------------
+ideal A*:26		ideal IDA*:57
+start A*:29/0		start IDA*:179/0
+center A*:31/0		center IDA*:1429/2
+end A*:31/0		end IDA*:875/4
+		-------------31-------------
+ideal A*:22		ideal IDA*:46
+start A*:24/0		start IDA*:300/2
+center A*:27/0		center IDA*:272/4
+end A*:23/0		end IDA*:535/2
+		-------------32-------------
+ideal A*:30		ideal IDA*:61
+start A*:34/0		start IDA*:911/2
+center A*:31/0		center IDA*:126/4
+end A*:32/0		end IDA*:299/10
+		-------------33-------------
+ideal A*:28		ideal IDA*:59
+start A*:32/0		start IDA*:739/2
+center A*:38/0		center IDA*:131/8
+end A*:36/0		end IDA*:1265/4
+		-------------34-------------
+ideal A*:24		ideal IDA*:54
+start A*:29/0		start IDA*:1332/4
+center A*:27/0		center IDA*:445/2
+end A*:30/0		end IDA*:233/4
+		-------------35-------------
+ideal A*:32		ideal IDA*:68
+start A*:51/0		start IDA*:53311/4
+center A*:38/0		center IDA*:4984/6
+end A*:48/0		end IDA*:118912/6
+		-------------36-------------
+ideal A*:22		ideal IDA*:48
+start A*:23/0		start IDA*:107/0
+center A*:25/0		center IDA*:389/4
+end A*:26/0		end IDA*:989/2
+		-------------37-------------
+ideal A*:26		ideal IDA*:54
+start A*:30/0		start IDA*:182/0
+center A*:48/4		center IDA*:595211/10
+end A*:39/0		end IDA*:1512/4
+		-------------38-------------
+ideal A*:26		ideal IDA*:54
+start A*:34/0		start IDA*:1331/2
+center A*:32/0		center IDA*:821/4
+end A*:33/0		end IDA*:2155/4
+		-------------39-------------
+ideal A*:22		ideal IDA*:52
+start A*:23/0		start IDA*:156/0
+center A*:25/0		center IDA*:281/2
+end A*:23/0		end IDA*:168/2
+		-------------40-------------
+ideal A*:22		ideal IDA*:51
+start A*:26/0		start IDA*:296/2
+center A*:29/0		center IDA*:1740/6
+end A*:30/0		end IDA*:9035/4
+		-------------41-------------
+ideal A*:24		ideal IDA*:50
+start A*:32/0		start IDA*:2525/2
+center A*:25/0		center IDA*:278/4
+end A*:28/0		end IDA*:307/4
+		-------------42-------------
+ideal A*:22		ideal IDA*:52
+start A*:22/0		start IDA*:90/0
+center A*:23/0		center IDA*:95/0
+end A*:33/2		end IDA*:1026/4
+		-------------43-------------
+ideal A*:26		ideal IDA*:55
+start A*:28/0		start IDA*:293/2
+center A*:31/0		center IDA*:322/6
+end A*:33/0		end IDA*:1039/2
+		-------------44-------------
+ideal A*:22		ideal IDA*:48
+start A*:23/0		start IDA*:116/0
+center A*:24/0		center IDA*:977/4
+end A*:27/0		end IDA*:1027/4
+		-------------45-------------
+ideal A*:26		ideal IDA*:59
+start A*:28/0		start IDA*:846/2
+center A*:36/2		center IDA*:1115/2
+end A*:37/0		end IDA*:30708/6
+		-------------46-------------
+ideal A*:34		ideal IDA*:72
+start A*:44/0		start IDA*:1978/2
+center A*:40/0		center IDA*:557/2
+end A*:48/0		end IDA*:597/6
+		-------------47-------------
+ideal A*:24		ideal IDA*:52
+start A*:40/0		start IDA*:1075/2
+center A*:30/0		center IDA*:167/4
+end A*:31/0		end IDA*:286/6
+		-------------48-------------
+ideal A*:22		ideal IDA*:51
+start A*:32/0		start IDA*:5149/4
+center A*:26/0		center IDA*:154/2
+end A*:28/0		end IDA*:350/2
+		-------------49-------------
+ideal A*:26		ideal IDA*:53
+start A*:29/0		start IDA*:357/2
+center A*:27/0		center IDA*:2616/6
+end A*:37/0		end IDA*:1571/4
+		-------------50-------------
+ideal A*:26		ideal IDA*:56
+start A*:38/0		start IDA*:669/2
+center A*:29/0		center IDA*:531/4
+end A*:31/0		end IDA*:877/2
+		-------------51-------------
+ideal A*:22		ideal IDA*:43
+start A*:26/0		start IDA*:124/0
+center A*:27/0		center IDA*:3443/6
+end A*:23/0		end IDA*:280/2
+		-------------52-------------
+ideal A*:30		ideal IDA*:64
+start A*:32/0		start IDA*:2049/2
+center A*:38/0		center IDA*:6468/4
+end A*:36/0		end IDA*:150/6
+		-------------53-------------
+ideal A*:22		ideal IDA*:47
+start A*:30/0		start IDA*:52/0
+center A*:29/0		center IDA*:719/2
+end A*:31/0		end IDA*:4531/4
+		-------------54-------------
+ideal A*:26		ideal IDA*:58
+start A*:36/2		start IDA*:3998/4
+center A*:38/0		center IDA*:2301/4
+end A*:37/0		end IDA*:324/8
+		-------------55-------------
+ideal A*:24		ideal IDA*:50
+start A*:34/0		start IDA*:4699/4
+center A*:28/0		center IDA*:82/2
+end A*:29/0		end IDA*:174/2
+		-------------56-------------
+ideal A*:24		ideal IDA*:46
+start A*:35/0		start IDA*:16506/4
+center A*:34/0		center IDA*:12656/2
+end A*:26/0		end IDA*:76/2
+		-------------57-------------
+ideal A*:22		ideal IDA*:47
+start A*:31/0		start IDA*:6186/4
+center A*:29/0		center IDA*:358/2
+end A*:29/0		end IDA*:293/4
+		-------------58-------------
+ideal A*:22		ideal IDA*:53
+start A*:25/0		start IDA*:410/2
+center A*:28/0		center IDA*:67/4
+end A*:31/0		end IDA*:664/2
+		-------------59-------------
+ideal A*:28		ideal IDA*:58
+start A*:29/0		start IDA*:361/2
+center A*:33/0		center IDA*:220/2
+end A*:34/0		end IDA*:354/4
+		-------------60-------------
+ideal A*:26		ideal IDA*:52
+start A*:32/0		start IDA*:614/0
+center A*:33/0		center IDA*:378/8
+end A*:34/0		end IDA*:1503/8
+		-------------61-------------
+ideal A*:22		ideal IDA*:48
+start A*:24/0		start IDA*:541/2
+center A*:24/0		center IDA*:126/0
+end A*:27/0		end IDA*:1973/4
+		-------------62-------------
+ideal A*:22		ideal IDA*:48
+start A*:28/0		start IDA*:449/2
+center A*:29/0		center IDA*:2215/6
+end A*:28/0		end IDA*:479/4
+		-------------63-------------
+ideal A*:26		ideal IDA*:58
+start A*:27/0		start IDA*:594/2
+center A*:35/0		center IDA*:1120/4
+end A*:32/0		end IDA*:961/2
+		-------------64-------------
+ideal A*:26		ideal IDA*:54
+start A*:28/0		start IDA*:334/0
+center A*:31/0		center IDA*:146/4
+end A*:27/0		end IDA*:444/2
+		-------------65-------------
+ideal A*:26		ideal IDA*:52
+start A*:34/0		start IDA*:3574/4
+center A*:32/0		center IDA*:255/4
+end A*:34/0		end IDA*:17719/6
+		-------------66-------------
+ideal A*:30		ideal IDA*:63
+start A*:48/0		start IDA*:4662/2
+center A*:46/0		center IDA*:6131/4
+end A*:37/0		end IDA*:816/4
+		-------------67-------------
+ideal A*:26		ideal IDA*:56
+start A*:37/0		start IDA*:4726/4
+center A*:29/0		center IDA*:423/4
+end A*:32/0		end IDA*:791/6
+		-------------68-------------
+ideal A*:26		ideal IDA*:62
+start A*:45/0		start IDA*:831/2
+center A*:31/0		center IDA*:575/4
+end A*:29/0		end IDA*:161/6
+		-------------69-------------
+ideal A*:22		ideal IDA*:48
+start A*:40/0		start IDA*:16626/2
+center A*:30/0		center IDA*:1939/2
+end A*:30/0		end IDA*:915/2
+		-------------70-------------
+ideal A*:24		ideal IDA*:53
+start A*:31/0		start IDA*:936/2
+center A*:29/0		center IDA*:230/4
+end A*:30/0		end IDA*:350/2
+		-------------71-------------
+ideal A*:28		ideal IDA*:60
+start A*:35/0		start IDA*:1166/2
+center A*:37/0		center IDA*:163/2
+end A*:35/0		end IDA*:2699/6
+		-------------72-------------
+ideal A*:30		ideal IDA*:63
+start A*:34/0		start IDA*:706/2
+center A*:40/0		center IDA*:11168/10
+end A*:34/0		end IDA*:2111/6
+		-------------73-------------
+ideal A*:24		ideal IDA*:52
+start A*:27/0		start IDA*:649/2
+center A*:29/0		center IDA*:497/4
+end A*:30/0		end IDA*:234/2
+		-------------74-------------
+ideal A*:24		ideal IDA*:55
+start A*:34/0		start IDA*:611/2
+center A*:28/0		center IDA*:148/2
+end A*:28/0		end IDA*:1612/4
+		-------------75-------------
+ideal A*:22		ideal IDA*:50
+start A*:29/0		start IDA*:478/2
+center A*:26/0		center IDA*:156/4
+end A*:27/2		end IDA*:514/4
+		-------------76-------------
+ideal A*:24		ideal IDA*:50
+start A*:27/0		start IDA*:125/0
+center A*:26/0		center IDA*:706/6
+end A*:30/0		end IDA*:364/4
+		-------------77-------------
+ideal A*:22		ideal IDA*:51
+start A*:30/0		start IDA*:441/2
+center A*:29/0		center IDA*:676/4
+end A*:28/0		end IDA*:912/2
+		-------------78-------------
+ideal A*:22		ideal IDA*:55
+start A*:24/0		start IDA*:170/0
+center A*:24/0		center IDA*:439/2
+end A*:42/2		end IDA*:4555/6
+		-------------79-------------
+ideal A*:22		ideal IDA*:47
+start A*:24/0		start IDA*:125/0
+center A*:25/0		center IDA*:120/2
+end A*:29/0		end IDA*:153/4
+		-------------80-------------
+ideal A*:24		ideal IDA*:46
+start A*:25/0		start IDA*:88/0
+center A*:30/0		center IDA*:567/2
+end A*:27/0		end IDA*:370/4
+		-------------81-------------
+ideal A*:26		ideal IDA*:55
+start A*:43/0		start IDA*:25346/6
+center A*:30/0		center IDA*:384/4
+end A*:33/0		end IDA*:387/6
+		-------------82-------------
+ideal A*:32		ideal IDA*:68
+start A*:37/0		start IDA*:741/2
+center A*:44/0		center IDA*:6049/8
+end A*:41/0		end IDA*:6482/8
+		-------------83-------------
+ideal A*:26		ideal IDA*:57
+start A*:32/0		start IDA*:4308/2
+center A*:44/0		center IDA*:637245/8
+end A*:36/0		end IDA*:2144/6
+		-------------84-------------
+ideal A*:24		ideal IDA*:54
+start A*:34/0		start IDA*:1590/2
+center A*:24/0		center IDA*:115/2
+end A*:29/0		end IDA*:1277/4
+		-------------85-------------
+ideal A*:28		ideal IDA*:58
+start A*:32/0		start IDA*:486/2
+center A*:37/0		center IDA*:1057/6
+end A*:34/0		end IDA*:18510/6
+		-------------86-------------
+ideal A*:32		ideal IDA*:66
+start A*:58/0		start IDA*:309440/8
+center A*:41/0		center IDA*:1497/10
+end A*:46/0		end IDA*:1939/6
+		-------------87-------------
+ideal A*:24		ideal IDA*:48
+start A*:27/0		start IDA*:319/2
+center A*:26/0		center IDA*:240/2
+end A*:28/0		end IDA*:114/2
+		-------------88-------------
+ideal A*:28		ideal IDA*:57
+start A*:34/0		start IDA*:713/2
+center A*:40/2		center IDA*:88395/6
+end A*:37/0		end IDA*:556/2
+		-------------89-------------
+ideal A*:22		ideal IDA*:48
+start A*:31/0		start IDA*:988/2
+center A*:26/0		center IDA*:724/2
+end A*:30/0		end IDA*:230/2
+		-------------90-------------
+ideal A*:24		ideal IDA*:57
+start A*:35/0		start IDA*:6491/4
+center A*:28/0		center IDA*:77/0
+end A*:34/0		end IDA*:26320/6
+		-------------91-------------
+ideal A*:22		ideal IDA*:47
+start A*:29/0		start IDA*:1113/2
+center A*:27/0		center IDA*:586/2
+end A*:33/0		end IDA*:16937/4
+		-------------92-------------
+ideal A*:24		ideal IDA*:49
+start A*:26/0		start IDA*:300/2
+center A*:28/0		center IDA*:379/6
+end A*:29/0		end IDA*:184/4
+		-------------93-------------
+ideal A*:24		ideal IDA*:53
+start A*:34/0		start IDA*:1636/2
+center A*:29/0		center IDA*:378/2
+end A*:26/0		end IDA*:140/2
+		-------------94-------------
+ideal A*:22		ideal IDA*:45
+start A*:31/0		start IDA*:558/2
+center A*:34/0		center IDA*:518/4
+end A*:29/0		end IDA*:404/4
+		-------------95-------------
+ideal A*:28		ideal IDA*:59
+start A*:40/0		start IDA*:4641/4
+center A*:38/0		center IDA*:1125/6
+end A*:36/0		end IDA*:400/4
+		-------------96-------------
+ideal A*:22		ideal IDA*:50
+start A*:24/0		start IDA*:259/2
+center A*:23/0		center IDA*:259/2
+end A*:30/0		end IDA*:2534/2
+		-------------97-------------
+ideal A*:24		ideal IDA*:51
+start A*:33/0		start IDA*:439/2
+center A*:27/0		center IDA*:174/4
+end A*:30/0		end IDA*:712/4
+		-------------98-------------
+ideal A*:24		ideal IDA*:52
+start A*:25/0		start IDA*:286/0
+center A*:34/0		center IDA*:290/4
+end A*:30/0		end IDA*:343/4
+		-------------99-------------
+ideal A*:28		ideal IDA*:61
+start A*:35/0		start IDA*:585/2
+center A*:33/0		center IDA*:791/4
+end A*:34/0		end IDA*:164/6
+		-------------100-------------
+ideal A*:28		ideal IDA*:62
+start A*:40/0		start IDA*:3648/4
+center A*:34/0		center IDA*:2117/4
+end A*:34/0		end IDA*:7148/4
+
+---------------------------Average result---------------------------
+ideal A*:24.68		ideal IDA*:53.18
+start A*:31.17/0.02		start IDA*:6473.1/2.02
+center A*:30.81/0.2		center IDA*:14471.13/3.8
+end A*:31.56/0.12		end IDA*:5178.78/4.0
