@@ -1,21 +1,42 @@
 
 ------start:------
 A*
- explored_nodes: 62, 
- suboptimal_solution: 5, IDA*
- explored_nodes: 314, 
- suboptimal_solution: 9, 
+ explored_nodes: 69, 
+ suboptimal_solution: 0, 
+IDA*
+ explored_nodes: 1910, 
+ suboptimal_solution: 8, 
+
+A* nodes average: 69.0
+A* suboptimal average: 0.0
+IDA* nodes average: 1910.0
+IDA* suboptimal average: 8.0
+
 
 ------middle:------
 A*
- explored_nodes: 36, 
- suboptimal_solution: 3, IDA*
- explored_nodes: 1441, 
- suboptimal_solution: 7, 
+ explored_nodes: 40, 
+ suboptimal_solution: 0, 
+IDA*
+ explored_nodes: 650, 
+ suboptimal_solution: 6, 
+
+A* nodes average: 40.0
+A* suboptimal average: 0.0
+IDA* nodes average: 650.0
+IDA* suboptimal average: 6.0
+
 
 ------end:------
 A*
- explored_nodes: 55, 
- suboptimal_solution: 3, IDA*
- explored_nodes: 1095, 
- suboptimal_solution: 5, 
+ explored_nodes: 89, 
+ suboptimal_solution: 0, 
+IDA*
+ explored_nodes: 1993, 
+ suboptimal_solution: 4, 
+
+A* nodes average: 89.0
+A* suboptimal average: 0.0
+IDA* nodes average: 1993.0
+IDA* suboptimal average: 4.0
+
