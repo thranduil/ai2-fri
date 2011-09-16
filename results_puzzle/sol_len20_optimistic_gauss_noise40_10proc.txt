@@ -1,21 +1,42 @@
 
 ------start:------
 A*
- explored_nodes: 44, 
- suboptimal_solution: 1, IDA*
- explored_nodes: 3049, 
- suboptimal_solution: 1, 
+ explored_nodes: 53, 70, 54, 69, 137, 40, 58, 49, 65, 78, 
+ suboptimal_solution: 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 
+IDA*
+ explored_nodes: 6291, 50984, 27859, 313, 2525, 528, 1243, 357, 3113, 444, 
+ suboptimal_solution: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+
+A* nodes average: 67.3
+A* suboptimal average: 0.4
+IDA* nodes average: 9365.7
+IDA* suboptimal average: 0.0
+
 
 ------middle:------
 A*
- explored_nodes: 65, 
- suboptimal_solution: 1, IDA*
- explored_nodes: 475, 
- suboptimal_solution: 1, 
+ explored_nodes: 42, 53, 55, 45, 49, 49, 40, 33, 52, 63, 
+ suboptimal_solution: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+IDA*
+ explored_nodes: 10011, 188, 237, 1642, 11001, 826, 82, 143, 6148, 4848, 
+ suboptimal_solution: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+
+A* nodes average: 48.1
+A* suboptimal average: 0.0
+IDA* nodes average: 3512.6
+IDA* suboptimal average: 0.0
+
 
 ------end:------
 A*
- explored_nodes: 32, 
- suboptimal_solution: 1, IDA*
- explored_nodes: 239, 
- suboptimal_solution: 1, 
+ explored_nodes: 28, 29, 31, 27, 26, 27, 23, 32, 32, 25, 
+ suboptimal_solution: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+IDA*
+ explored_nodes: 124, 113, 80, 98, 85, 141, 113, 172, 243, 66, 
+ suboptimal_solution: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+
+A* nodes average: 28.0
+A* suboptimal average: 0.0
+IDA* nodes average: 123.5
+IDA* suboptimal average: 0.0
+

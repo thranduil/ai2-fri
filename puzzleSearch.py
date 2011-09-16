@@ -181,7 +181,29 @@ def testing(sol_lens, noise_types, noise_mags, repeats):
   for sl in sol_lens:
     positions = findPositions(sl,eH)
     random.shuffle(positions)
-    # calculate ideal
+    
+    #test with exact (ideal) heuristic
+    f_ideal = file("results_puzzle/sol_len%i_idealH.txt"%(sl),"w")
+    a_ideal = []
+    ida_ideal = []
+    for r in range(repeats):
+      path,count = aStarSearch(State(positions[r],None,sl), eH)
+      a_ideal.append(count)
+      path,limit,count = idaStarSearch(State(positions[r],None,sl), eH)
+      ida_ideal.append(count)
+    f_ideal.write('A*_ideal:\n')
+    for x in a_ideal:
+      f_ideal.write(str(x)+',')
+    f_ideal.write('\nIDA*_ideal:\n')
+    for x in ida_ideal:
+      f_ideal.write(str(x)+',')
+    f_ideal.write('\n\nA*_ideal_average: ')
+    f_ideal.write(str(float(sum(a_ideal))/len(a_ideal)))
+    f_ideal.write('\n\nIDA*_ideal_average: ')
+    f_ideal.write(str(float(sum(ida_ideal))/len(ida_ideal)))
+    f_ideal.close()
+    
+    
     for nt in noise_types:
       for nm in noise_mags:
         test_counter+=1
@@ -198,25 +220,30 @@ def testing(sol_lens, noise_types, noise_mags, repeats):
             #print 'A* test'
             path,count = aStarSearch(State(positions[r],None,sl), distorted)
             a_nodes.append(count)
-            a_diff.append(len(path)-sl)
+            a_diff.append(len(path)-sl-1)
             #print 'IDA* test'
             path,limit,count = idaStarSearch(State(positions[r],None,sl), distorted)
             ida_nodes.append(count)
-            ida_diff.append(len(path)-sl)
+            ida_diff.append(len(path)-sl-1)
             
+          #calculate average
           f.write('A*\n explored_nodes: ')
           for n in a_nodes:
             f.write(str(n)+', ')
           f.write('\n suboptimal_solution: ')
           for n in a_diff:
             f.write(str(n)+', ')
-          f.write('IDA*\n explored_nodes: ')
+          f.write('\nIDA*\n explored_nodes: ')
           for n in ida_nodes:
             f.write(str(n)+', ')
           f.write('\n suboptimal_solution: ')
           for n in ida_diff:
             f.write(str(n)+', ')
-          f.write('\n')
+          f.write('\n\nA* nodes average: '+str(float(sum(a_nodes))/len(a_nodes)))
+          f.write('\nA* suboptimal average: '+str(float(sum(a_diff))/len(a_diff)))
+          f.write('\nIDA* nodes average: '+str(float(sum(ida_nodes))/len(ida_nodes)))
+          f.write('\nIDA* suboptimal average: '+str(float(sum(ida_diff))/len(ida_diff)))
+          f.write('\n\n')
         f.close()
 
 
@@ -252,7 +279,7 @@ def test():
   solution_lengths = [15,20,25]
   noise_types = ['optimistic_gauss','pessimistic_gauss','gauss']
   noise_magnitudes = [[0.1,0],[0.2,0],[0.3,0],[0.2,0.1],[0.3,0.1],[0.4,0.1]]
-  iterations = 1
+  iterations = 10
   testing(solution_lengths, noise_types, noise_magnitudes, iterations)
   
 if __name__ == "__main__":test()
