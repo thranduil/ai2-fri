@@ -1,8 +1,8 @@
 A*_ideal:
-21,
+21,21,21,21,21,21,21,21,21,21,
 IDA*_ideal:
-36,
+43,41,42,41,45,42,39,38,46,38,
 
 A*_ideal_average: 21.0
 
-IDA*_ideal_average: 36.0
+IDA*_ideal_average: 41.5

@@ -279,7 +279,7 @@ def test():
   solution_lengths = [15,20,25]
   noise_types = ['optimistic_gauss','pessimistic_gauss','gauss']
   noise_magnitudes = [[0.1,0],[0.2,0],[0.3,0],[0.2,0.1],[0.3,0.1],[0.4,0.1]]
-  iterations = 1
+  iterations = 10
   testing(solution_lengths, noise_types, noise_magnitudes, iterations)
   
 if __name__ == "__main__":test()
