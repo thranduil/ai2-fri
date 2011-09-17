@@ -33,10 +33,13 @@ class brickWorld():
     self.finishPoint = (size + self.finishPoint[0], size + self.finishPoint[1])
     self.density = int((size-2)*(size-2)*float(density)/100)
     self.createBrickWorld()
+    loopNotVisit = True
     #trying to make world until path from start to end exists
     while not self.pathExist():
+      if loopNotVisit == True:
         logging.warning("Path in map does not exist - remaking map.")
-        self.createBrickWorld()
+        loopNotVisit = False
+      self.createBrickWorld()
   
   
   ##create world with random bricks in it

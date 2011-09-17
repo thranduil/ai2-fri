@@ -8,10 +8,10 @@ logging.basicConfig(format=FORMAT, datefmt='%H:%M:%S', level=logging.DEBUG)
 def test():
     ##parameters for running tests
     mapSize=[20]
-    mapBricksAmount=[20,40,60,80]
-    heuristic_type=['optimistic_gauss', 'gauss', 'pessimistic_gauss']
-    noise_amount=[0.1,0.2,0.4]
-    iterationNo = 1
+    mapBricksAmount=[60]
+    heuristic_type=['gauss', 'pessimistic_gauss']
+    noise_amount=[0.2]
+    iterationNo = 100
     
     test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iterationNo)
 
@@ -38,10 +38,17 @@ def test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iter
                         #size in one dimension and density in %
                         testMap = bricksWorld.brickWorld(size,brickPercentage)
                         
-                        idealPathLength = testMap.getIdealPathLength()
+                        idealPathLength = testMap.getIdealPathLength() + 1
                         start = testMap.distortHeuristic('start', heuristic, noise, 0)
                         center = testMap.distortHeuristic('middle', heuristic, noise, 0)
                         end = testMap.distortHeuristic('end', heuristic, noise, 0)
+                        
+                        testMap.compareHeuristics(start)
+                        print ""
+                        testMap.compareHeuristics(center)
+                        print ""
+                        testMap.compareHeuristics(end)
+                        print ""
                               
                         logging.debug("Performing A*")
                         testMap.aStarSearch(testMap.priceWorld)
