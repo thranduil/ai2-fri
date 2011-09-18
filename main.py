@@ -7,10 +7,10 @@ logging.basicConfig(format=FORMAT, datefmt='%H:%M:%S', level=logging.DEBUG)
 
 def test():
     ##parameters for running tests
-    mapSize=[20]
+    mapSize=[30]
     mapBricksAmount=[20]
-    heuristic_type=['optimistic_gauss']
-    noise_amount=[0.2]
+    heuristic_type=['optimistic_gauss','gauss','pessimistic_gauss']
+    noise_amount=[0.1]
     iterationNo = 100
     
     test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iterationNo)
@@ -21,11 +21,10 @@ def test():
 def test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iterationNo):
     testMap = None
     better_noise = 0
-    
-    for heuristic in heuristic_type:
-        for size in mapSize:
-            for brickPercentage in mapBricksAmount:
-                for noise in noise_amount:
+    for size in mapSize:
+        for brickPercentage in mapBricksAmount:
+            for noise in noise_amount:
+                for heuristic in heuristic_type:
                     result_a_i,result_a_s,result_a_c,result_a_e = 0,0,0,0
                     result_ida_i,result_ida_s,result_ida_c,result_ida_e = 0,0,0,0
                     delta_optimal_a_s, delta_optimal_a_c, delta_optimal_a_e = 0,0,0
@@ -35,7 +34,7 @@ def test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iter
                     
                     for iteration in range(iterationNo):
                         
-                        logging.debug("iteration:"+str(iteration))
+                        logging.debug("iteration:"+str(iteration+1))
                         
                         #size in one dimension and density in %
                         testMap = bricksWorld.brickWorld(size,brickPercentage)
@@ -45,7 +44,7 @@ def test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iter
                         center = testMap.distortHeuristic('middle', heuristic, noise, 0)
                         end = testMap.distortHeuristic('end', heuristic, noise, 0)
                               
-                        logging.debug("Performing A*")
+                        #logging.debug("Performing A*")
                         testMap.aStarSearch(testMap.priceWorld)
                         #result used for average
                         result_a_i = result_a_i + testMap.aStarCheckedNodes
@@ -56,24 +55,18 @@ def test_brickWorld(mapSize, mapBricksAmount, heuristic_type, noise_amount, iter
                         result_a_s = result_a_s + testMap.aStarCheckedNodes
                         temp_a_s = testMap.aStarCheckedNodes
                         delta_optimal_a_s = delta_optimal_a_s + (pl1 - idealPathLength)
-                        if (pl1 - idealPathLength) > 0:
-                          testMap.compareHeuristics(start)
                         
                         pl2 = testMap.aStarSearch(center)
                         result_a_c = result_a_c + testMap.aStarCheckedNodes
                         temp_a_c = testMap.aStarCheckedNodes
                         delta_optimal_a_c = delta_optimal_a_c + (pl2 - idealPathLength)
-                        if (pl2 - idealPathLength) > 0:
-                          testMap.compareHeuristics(center)
                         
                         pl3 = testMap.aStarSearch(end)
                         result_a_e = result_a_e + testMap.aStarCheckedNodes
                         temp_a_e = testMap.aStarCheckedNodes
                         delta_optimal_a_e = delta_optimal_a_e + (pl3 - idealPathLength)
-                        if (pl3 - idealPathLength) > 0:
-                          testMap.compareHeuristics(end)
                         
-                        logging.debug("Performing IDA*")
+                        #logging.debug("Performing IDA*")
                         testMap.idaStarSearch(testMap.priceWorld)
                         result_ida_i = result_ida_i + testMap.idaStarNodes
                         temp_ida_i = testMap.idaStarNodes

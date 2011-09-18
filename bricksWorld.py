@@ -158,9 +158,6 @@ class brickWorld():
       if current.getXY() == self.finishPoint:
         self.aStarCheckedNodes = len(closedList)
         self.aStarOpenNodes = len(openList)
-        print "Path:",
-        self.printAStarPath(current)
-        print ""
         return self.getAStarPathLength(current)
         
       openList.remove(current)
