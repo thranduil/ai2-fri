@@ -9,14 +9,15 @@ import time
 def aStarSearch(start_state, heuristic):
     #in open list we put cells that we are going to look
     #in closed list we put tuple (x,y) coordinates of cells that we already looked
-    openList = set()
+    openList = []
     closedList = set()
     current = start_state
-    openList.add(current)
+    openList.append(current)
     
     while openList:
-      temp = sorted(openList, key = lambda State:State.getG(), reverse=True)
-      current = sorted(temp, key = lambda State:State.getF())[0]
+      #openList = sorted(openList, key = lambda State:State.getG(), reverse=True)
+      openList = sorted(openList, key = lambda State:State.getF())
+      current = openList[0]
 
       if current.getPosition() == '123456780':
         count = len(closedList)+1
@@ -27,7 +28,8 @@ def aStarSearch(start_state, heuristic):
       neighbors = getNeighborStates(current,heuristic)
       for n in neighbors:
         if n not in closedList:
-          openList.add(n)
+          openList.append(n)
+          
     print "Fail to find path"
 
 
@@ -210,12 +212,15 @@ def testing(sol_lens, noise_types, noise_mags, repeats):
         print 'testing...',test_counter
         f = file("results_puzzle/sol_len%i_%s_noise%i_%iproc.txt"%(sl,nt,int(nm[0]*100),int(nm[1]*100)),"w")
         for part in ['start', 'middle', 'end']:
+          print part
           a_nodes = []
           a_diff = []
           ida_nodes = []
           ida_diff = []
           f.write('\n------'+part+':------\n')
           for r in range(repeats):
+            if r%10 == 0:
+              print r
             distorted = distortHeuristic(eH, sl, part, nt, nm[0], nm[1])
             #print 'A* test'
             path,count = aStarSearch(State(positions[r],None,sl), distorted)
@@ -278,9 +283,14 @@ def testing(sol_lens, noise_types, noise_mags, repeats):
 def test():
   solution_lengths = [15,20,25]
   noise_types = ['optimistic_gauss','pessimistic_gauss','gauss']
-  noise_magnitudes = [[0.1,0],[0.2,0],[0.3,0],[0.2,0.1],[0.3,0.1],[0.4,0.1]]
+  noise_magnitudes = [[0.1,0],[0.2,0],[0.3,0],[0.2,0.1],[0.3,0.1]]
+#  solution_lengths = [25]
+#  noise_types = ['gauss']
+#  noise_magnitudes = [[0.4,0.1]]
   iterations = 100
   testing(solution_lengths, noise_types, noise_magnitudes, iterations)
   
 if __name__ == "__main__":test()
+
+
 
