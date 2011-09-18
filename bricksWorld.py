@@ -145,24 +145,39 @@ class brickWorld():
     #in closed list we put tuple (x,y) coordinates of cells that we already looked
     openList = set()
     closedList = set()
+    #closed list with F value, for reopening nodes in closed list
+    closedListTemp = set()
     #current - start cell
     current = cell(self.startPoint[0],self.startPoint[1],None,self.getCell(heuristic,self.startPoint[0],self.startPoint[1]))
     openList.add(current)
     
     while openList:
-      temp = sorted(openList, key = lambda cell:cell.getG(), reverse=True)
-      current = sorted(temp, key = lambda cell:cell.getF())[0]
+      #temp = sorted(openList, key = lambda cell:cell.getG(), reverse=True)
+      current = sorted(openList, key = lambda cell:cell.getF())[0]
       
       if current.getXY() == self.finishPoint:
         self.aStarCheckedNodes = len(closedList)
         self.aStarOpenNodes = len(openList)
+        print "Path:",
+        self.printAStarPath(current)
+        print ""
         return self.getAStarPathLength(current)
         
       openList.remove(current)
       closedList.add(current.getXY())
+      closedListTemp.add(current.getXYF())
       neighbors = self.getNeighborCell(current, heuristic)
       for n in neighbors:
-        if n.getXY() not in closedList:
+        if n.getXY() in closedList:
+          #go through closed list with F values and compare F of the same nodes
+          for t in closedListTemp:
+            if t[0] == n.getX() and t[1] == n.getY():
+              #check if we can reopen node
+              if n.getF() < t[2]:
+                openList.add(n)
+                closedList.remove(n.getXY())
+                break
+        else:
           openList.add(n)
     print "Fail to find path"
     return -1
@@ -177,7 +192,7 @@ class brickWorld():
     it = 0
     while True:
       it+=1
-      logging.debug("Iteration:"+str(it))
+      #logging.debug("Iteration:"+str(it))
       (solution, costLimit) = self.DFS(0, rootNode, costLimit, [rootNode],heuristic)
       if solution != None:
         return len(solution)
@@ -223,7 +238,7 @@ class brickWorld():
   ##recursively print path from finish to start point for A* algorithm
   def printAStarPath(self,currentCell):
     while currentCell != None:
-      print currentCell
+      print currentCell,
       currentCell = currentCell.parent
   
   
@@ -290,15 +305,15 @@ class brickWorld():
           if self.priceWorld[i]-newHeuristic[i] == 0:
             print "  "
           else:
-            print '%02d'%i(newHeuristic[i])
+            print '%02d'%i(self.priceWorld[i]-newHeuristic[i])
       else:
         if self.priceWorld[i] == '#':
-          print self.priceWorld[i]+'#',
+          print self.priceWorld[i]+'#,',
         else:
           if self.priceWorld[i]-newHeuristic[i] == 0:
-            print "  ",
+            print "  ,",
           else:
-            print '%02d'%(newHeuristic[i]),
+            print '%02d,'%(self.priceWorld[i]-newHeuristic[i]),
   
   
   #Helper function that checks if heuristic is only positive 

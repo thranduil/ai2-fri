@@ -52,15 +52,9 @@ class cell():
   def getXY(self):
     return (self.x,self.y)
   
-  
-  ##redefine hash and compare
-  def __hash__(self):
-    return (41 * (41 + self.x) + self.y);
-  
-  def __eq__(self, other):
-    if self.__hash__() == other.__hash__():
-      return True
-    return False
+  ##get coordinate and f(x)
+  def getXYF(self):
+    return (self.x,self.y,self.getF())
   
   
   
