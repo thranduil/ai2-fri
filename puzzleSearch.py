@@ -18,9 +18,10 @@ def aStarSearch(start_state, heuristic):
       #openList = sorted(openList, key = lambda State:State.getG(), reverse=True)
       openList = sorted(openList, key = lambda State:State.getF())
       current = openList[0]
-
+      
+      extra = 0
       if current.getPosition() == '123456780':
-        count = len(closedList)+1
+        count = len(closedList)+1+extra
         path = solutionPath(current)[1]
         return path, count
       openList.remove(current)
@@ -29,6 +30,16 @@ def aStarSearch(start_state, heuristic):
       for n in neighbors:
         if n not in closedList:
           openList.append(n)
+        else:
+          rm = None
+          for el in closedList:
+            if el == n:
+              if n.getF() < el.getF():
+                openList.append(n)
+                rm = el
+                extra+=1
+              break
+          if rm != None: closedList.remove(rm)
           
     print "Fail to find path"
 
@@ -284,9 +295,6 @@ def test():
   solution_lengths = [15,20,25]
   noise_types = ['optimistic_gauss','pessimistic_gauss','gauss']
   noise_magnitudes = [[0.1,0],[0.2,0],[0.3,0],[0.2,0.1],[0.3,0.1]]
-#  solution_lengths = [25]
-#  noise_types = ['gauss']
-#  noise_magnitudes = [[0.4,0.1]]
   iterations = 100
   testing(solution_lengths, noise_types, noise_magnitudes, iterations)
   
