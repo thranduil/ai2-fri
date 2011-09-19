@@ -93,7 +93,7 @@ def distortHeuristic(h, solution_length, better_part, noise_type, noise_magnitud
   new_h = copy(h)
   
   for k,v in new_h.iteritems():
-    if better_part == 'start':
+    if better_part == 'end':
       if v > round(solution_length/3):
         new_h[k] = calculateNoise(v, noise_type, noise_magnitude)
       elif better_noise > 0:
@@ -105,7 +105,7 @@ def distortHeuristic(h, solution_length, better_part, noise_type, noise_magnitud
       elif better_noise > 0:
         new_h[k] = calculateNoise(v, noise_type, better_noise)
         
-    elif better_part == 'end':
+    elif better_part == 'start':
       if v < round(2*solution_length/3):
         new_h[k] = calculateNoise(v, noise_type, noise_magnitude)
       elif better_noise > 0:
